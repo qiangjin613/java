@@ -95,5 +95,70 @@ class StreamsAreAutoCloseable {
 
 /**
  * 【揭示细节】
+ * 创建自己的 AutoCloseable 类
  *  try-with-resources 定义子句中创建的对象（在括号内）必须实现 java.lang.AutoCloseable 接口，这个接口只有一个方法：close()
  */
+class Reporter implements AutoCloseable {
+    String name = getClass().getSimpleName();
+    Reporter () {
+        System.out.println("Creating " + name);
+    }
+    @Override
+    public void close() throws Exception {
+        System.out.println("Closing " + name);
+    }
+}
+class First extends Reporter {}
+class Second extends Reporter {}
+class AutoCloseableDetails {
+    public static void main(String[] args) {
+        try(
+                First f = new First();
+                Second s = new Second()
+        ) {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+/**
+ * 如果不是 AutoCloseable 的对象，就无法通过编译
+ */
+//class Anything {}
+//class TryAnything {
+//    public static void main(String[] args) {
+//        try(
+//                Anything a = new Anything() // 编译错误：Anything无法转换为java.lang.AutoCloseable
+//        ) {
+//
+//        }
+//    }
+//}
+
+/**
+ * 构造函数抛出异常的情况
+ */
+class CE extends Exception {}
+class SecondException extends Reporter {
+    SecondException() throws CE {
+        super();
+        throw new CE();
+    }
+}
+class ConstructorException {
+    public static void main(String[] args) {
+        try(
+                First f = new First();
+                SecondException s = new SecondException();
+                Second s2 = new Second()
+        ) {
+            System.out.println("In body");
+        } catch (CE e) {
+            System.out.println("Caught CE: " + e);
+        } catch (Exception e) {
+            System.out.println("Caught Exception: " + e);
+        }
+    }
+}
