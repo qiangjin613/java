@@ -137,3 +137,155 @@ class BlankFinal {
  * 【final 参数】
  * 在参数列表中，将参数声明为 final 意味着在方法中不能改变参数指向的对象或基本变量
  */
+class Gizmo {
+    public void spin() {
+
+    }
+}
+class FinalArguments {
+    void with(final Gizmo g) {
+        // 编译错误，不能给 final 变量 g 赋值
+        // g = new Gizmo();
+    }
+    void without(Gizmo g) {
+        g = new Gizmo();
+        g.spin();
+    }
+
+    void f(final int i) {
+        // 编译错误，不能给 final 变量 i 赋值
+        // i++;
+    }
+    int g(final int i) {
+        return i + 1;
+    }
+
+    public static void main(String[] args) {
+        FinalArguments bf = new FinalArguments();
+        bf.without(null);
+        bf.with(null);
+    }
+}
+
+
+/**
+ * 【final 方法】
+ * 使用 final 方法的原因有两个：
+ * 1) 给方法上锁
+ *    防止子类通过覆写方法的行为。这是出于继承的考虑，确保方法的行为不会因继承而改变。
+ * 2) 效率
+ *    现在基本上是不用这种方法来提升效率的！
+ *    应该让编译器和 JVM 处理性能问题，只有在为了明确禁止覆写方法时才使用 final。
+ */
+
+
+/**
+ * 【final 和 private】
+ * 类中所有的 private 方法都隐式地指定为 final。
+ * 因为不能访问 private 方法，所以不能覆写它。
+ * 可以给 private 方法添加 final 修饰，但是并不能给方法带来额外的含义。
+ *
+ * final：可以访问，但不可覆写
+ * private：不能访问，也就不可覆写
+ */
+class WithFinals {
+    // [1] 与 g() 效果相同，private 默认就是 final 的
+    private final void f() {
+        System.out.println("WithFinals.f()");
+    }
+    // [2] 自动地为 final
+    private void g() {
+        System.out.println("WithFinals.g()");
+    }
+
+    public final void h() {
+        System.out.println("WithFinals.h()");
+    }
+}
+
+class OverridingPrivate extends WithFinals {
+    // f() 和 g() 与基类的方法没有任何关系，只是恰好有同名的方法而已，没有“覆写”关系
+    private final void f() {
+        System.out.println("OverridingPrivate.f()");
+    }
+    private void g() {
+        System.out.println("OverridingPrivate.g()");
+    }
+    // 编译错误，不能覆盖 WithFinals 的 final h() 方法
+    // public void h() {
+    //     System.out.println("OverridingPrivate.h()");
+    // }
+}
+
+class OverridingPrivate2 extends OverridingPrivate {
+    public final void f() {
+        System.out.println("OverridingPrivate2.f()");
+    }
+    public void g() {
+        System.out.println("OverridingPrivate2.g()");
+    }
+}
+
+class FinalOverridingIllusion {
+    public static void main(String[] args) {
+        OverridingPrivate2 op2 = new OverridingPrivate2();
+        op2.f();
+        op2.g();
+        // 可以向上转型：
+        OverridingPrivate op = op2;
+        op.h();
+        // 但是不可以使用方法：
+        // op.f();
+        // op.g();
+
+        // 一样不可以使用该方法：
+        WithFinals wf = op2;
+        wf.h();
+        // wf.f();
+        // wf.g();
+    }
+}
+
+/**
+ * 一段需要理解的话，解释 private 的奥秘：
+ * 如果一个方法是 private 的，它就不是基类接口的一部分。
+ * 它只是隐藏在类内部的代码，且恰好有相同的命名而已。
+ * 但是如果你在派生类中以相同的命名创建了 public，protected 或包访问权限的方法，
+ * 这些方法与基类中的方法没有联系，你没有覆写方法，只是在创建新的方法而已。
+ * 由于 private 方法无法触及且能有效隐藏，除了把它看作类中的一部分，其他任何事物都不需要考虑到它。
+ */
+
+
+/**
+ * 【final 类】
+ * 当一个类是 final 的，就意味着它不能被继承！（也就没有“覆写”）
+ * 之所以这么做，是因为类的设计就是永远不需要改动，或者处于安全考虑不希望它有子类。
+ *
+ * 之外，由于 final 类禁止继承，也就禁止覆写。
+ * 可以在 final 类中的方法加上 final 修饰符，但这并不会有任何意义。
+ *
+ * “覆写”关系是建立在“继承”之上的！
+ */
+class SmallBrain {}
+
+final class Dinosaur {
+    // [1] final 类的字段并不会被隐式地指定为 final
+    int i = 7;
+    final int j = 1;
+    SmallBrain x = new SmallBrain();
+    // [2] final 类的方法隐式指定为 fianl
+    void f() {}
+}
+// 不能继承 fianl 类 Dinosaur
+// class Further extends Dinosaur {}
+
+class Jurassic {
+    public static void main(String[] args) {
+        Dinosaur n = new Dinosaur();
+        n.f();
+        n.i = 40;
+        // 不可以为 final 字段赋值
+        // n.j++;
+        n.x = new SmallBrain();
+    }
+}
