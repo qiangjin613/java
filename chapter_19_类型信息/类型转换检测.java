@@ -2,8 +2,12 @@
  * instanceof 的使用
  */
 
+import javafx.util.Pair;
+
+import java.nio.channels.ClosedSelectorException;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -11,9 +15,18 @@ import java.util.stream.Stream;
  */
 class Individual {
     private String name;
+    private int id;
     Individual() {}
     Individual(String name) {
         this.name = name;
+    }
+
+    public int id() {
+        return id;
+    }
+    @Override
+    public String toString() {
+        return "Individual{" + "className='" + getClass().getSimpleName() + '\'';
     }
 }
 /**
@@ -94,6 +107,7 @@ class Cymric extends Manx {
 /**
  * 一个随机创建不同类型的宠物的类，同时，还可以创建 宠物数组 和 宠物List
  * （为了使这个类更加普遍适用，将其定义为抽象类）
+ * 数组和List为 types() 服务，而 types() 则为 get() 服务
  */
 abstract class PetCreator implements Supplier<Pet> {
     private Random rand = new Random(47);
@@ -142,9 +156,10 @@ class ForNameCreator extends PetCreator {
     }
 }
 /**
- *
+ * 关键字 instanceof 的使用：对 Pet 的实际对象进行计数
  */
 class PetCount {
+    // 根据名称进行计数 <类名, 数量>
     static class Counter extends HashMap<String, Integer> {
         public void count(String type) {
             Integer quantity = get(type);
@@ -158,7 +173,9 @@ class PetCount {
 
     public static void countPets(PetCreator creator) {
         Counter counter = new Counter();
-        for (Pet pet : Pets.array(20)) {
+        for (int i = 0; i < 20; i++) {
+            // 使用 PetCretor 获取对象，
+            Pet pet = creator.get();
             System.out.print(pet.getClass().getSimpleName() + " ");
             if (pet instanceof Pet) {
                 counter.count("Pet");
@@ -199,7 +216,7 @@ class PetCount {
 /**
  * 【使用类字面常量】
  * 使用类字面量重新实现 PetCreator 类
- * （其结果在很多方面都会更清晰）
+ * （其结果在很多方面都会更清晰，拥有使用类字面常量的诸多好处）
  */
 class LiteralPetCreator extends PetCreator {
     public static final List<Class<? extends Pet>> ALL_TYPES =
@@ -209,7 +226,7 @@ class LiteralPetCreator extends PetCreator {
                     Manx.class, Cymric.class));
 
     private static final List<Class<? extends Pet>> TYPES =
-            ALL_TYPES.subList(ALL_TYPES.indexOf(Mutt.class),
+            ALL_TYPES.subList(ALL_TYPES.indexOf(EgyptianMau.class),
                     ALL_TYPES.size());
 
     @Override
@@ -222,12 +239,13 @@ class LiteralPetCreator extends PetCreator {
     }
 }
 /**
- * 创建一个使用 LiteralPetCreator 的外观模式
+ * 创建一个使用 LiteralPetCreator 的外观模式，用于创建多个 Pet 对象
  */
 class Pets {
     public static final PetCreator CREATOR = new LiteralPetCreator();
 
     public static Pet get() {
+        System.out.println("使用 Pets.get()");
         return CREATOR.get();
     }
 
@@ -253,16 +271,107 @@ class Pets {
  */
 class PetCount2 {
     public static void main(String[] args) {
+        // 生成的 Pet 对象将是 Pets 的 get() 生成的
+        // 使用了多态
         PetCount.countPets(Pets.CREATOR);
     }
 }
 
 
+/**
+ * 【一个动态 instanceof 函数】
+ * Class.isInstance() 方法提供了一种动态测试对象类型的方法。
+ * （所有繁琐的 instnceof 语句都可以使用 类字面常量.isInstance() 替换）
+ */
+class PetCount3 {
+    static class Counter extends
+            LinkedHashMap<Class<? extends Pet>, Integer> {
+        Counter() {
+            // 预先加载所有不同的 Pet 类
+            super(load());
+        }
+
+        public static Map<Class<? extends Pet>, Integer> load(){
+            Map<Class<? extends Pet>, Integer> map = new LinkedHashMap<>();
+            for (Class<? extends Pet> type : LiteralPetCreator.ALL_TYPES) {
+                map.put(type, 0);
+            }
+            return map;
+        }
+
+        public void count(Pet pet) {
+            entrySet().stream()
+                    .filter(pair -> pair.getKey().isInstance(pet))
+                    .forEach(pair -> put(pair.getKey(), pair.getValue() + 1));
+        }
+
+        @Override
+        public String toString() {
+            String result = entrySet().stream()
+                    .map(pair -> String.format("%s=%s",
+                            pair.getKey().getSimpleName(),
+                            pair.getValue()))
+                    .collect(Collectors.joining(", "));
+            return "{" + result + "}";
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Counter petCount = new Counter();
+        Pets.stream()
+                .limit(20)
+                .peek(petCount::count)
+                .forEach(p -> System.out.print(p.getClass().getSimpleName() + " "));
+        System.out.println("n" + petCount);
+     }
+}
 
 
+/**
+ * 【递归计数】
+ * 上述代码预先加载了所有不同的 Pet 类。
+ * 现在使用 Class.isAssignableFrom() 创建一个不限于计数 Pet 的通用工具。
+ */
+class TypeCounter extends HashMap<Class<?>, Integer> {
+    private Class<?> baseType;
+    public TypeCounter(Class<?> baseType) {
+        this.baseType = baseType;
+    }
+    public void count(Object obj) {
+        Class<?> type = obj.getClass();
+        if (!baseType.isAssignableFrom(type)) {
+            throw new RuntimeException(
+                    obj + " incorrect type: " + type +
+                    ", should be type or subtype of " + baseType);
+        }
+        countClass(type);
+    }
+    private void countClass(Class<?> type) {
+        Integer quantity = get(type);
+        put(type, quantity == null ? 1 : quantity + 1);
+        Class<?> superClass = type.getSuperclass();
+        if (superClass != null && baseType.isAssignableFrom(superClass)) {
+            countClass(superClass);
+        }
+    }
 
-
-
-
-
-
+    @Override
+    public String toString() {
+        String result = entrySet().stream()
+                .map(pair -> String.format("%s=%s",
+                        pair.getKey().getSimpleName(),
+                        pair.getValue()))
+                .collect(Collectors.joining(", "));
+        return "{" + result + "}";
+    }
+}
+class PetCount4 {
+    public static void main(String[] args) {
+        TypeCounter counter = new TypeCounter(Pet.class);
+        Pets.stream()
+                .limit(10)
+                .peek(counter::count)
+                .forEach(p -> System.out.print(p.getClass().getSimpleName() + " "));
+        System.out.println("\nn" + counter);
+    }
+}
