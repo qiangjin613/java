@@ -55,6 +55,7 @@ class SpaceShipDelegation {
     public SpaceShipDelegation(String name) {
         this.name = name;
     }
+
     // 委托方法：
     public void up(int velocity) {
         controls.up(velocity);

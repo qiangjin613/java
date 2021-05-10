@@ -122,30 +122,48 @@ class CADSystem extends Shape {
 /**
  * 【名称隐藏】
  * 重载机制不论是在基类还是派生类中，都会起作用。
+ * 换句话说，重载不会因为在基类（派生类）或者父类（基类）中的位置不同而失效！
  */
 class Homer {
     char doh(char c) {
         System.out.println("doh(char)");
         return 'd';
     }
+    // 重载上面的 doh 方法。重载是指编写同名的方法
     float doh(float f) {
         System.out.println("doh(float)");
         return 1.0f;
     }
+    // 重载 doh()
+    double doh(int i) {
+        return 1.0f;
+    }
+    // 需要注意的是：重载是根据 方法签名（方法名 + 参数列表） 来判断的，返回值的不同不算重载。
+//    int doh(char c) {
+//        return 1;
+//    }
 }
 
 class Milhouse  {}
 
 class Bart extends Homer {
-    // 重载基类的 doh()：
+    // 重载基类的 doh():
     void doh(Milhouse m) {
         System.out.println("doh(Milhouse)");
+    }
+
+    // 覆盖基类的 doh():
+    @Override
+    double doh(int i) {
+        return 1;
     }
 }
 
 class Hide {
     public static void main(String[] args) {
         Bart b = new Bart();
+        // 在调用时，如果有就调用准确匹配的方法，如果没有就进行向上转型找有没有相关方法
+        // 如：char --> int --> float --> double，还有 short、byte 等类型如同数值计算时的自动转换
         b.doh(1);
         b.doh('x');
         b.doh(1.0f);
@@ -157,69 +175,4 @@ class Hide {
  * Java 5 添加了 @Override 注解。
  * 当打算重写一个方法时，可以选择添加这个注解，
  * 如果不小心用了重载而不是重写，编译器会产生一个错误消息。
- */
-
-
-/**
- * 【组合与继承的选择】
- * 1) 当想在新类中包含一个已有类的功能时，使用组合（or 委托）。新类的使用者看到的是新类的接口，而非嵌入对象的接口
- *
- * 有时让类的用户直接访问到新类中的组合成分是有意义的。（只需将成员对象声明为 public 即可，可以看作“半委托”）
- * 成员对象隐藏了具体实现，所以是安全的。
- * 当用户知道这是在组装以组部件时，会使接口更加容易理解。
- * 声明成员为 public 有助于客户端程序员理解如何使用类，且降低了类创建者面临的代码复杂度。
- * （但是，这这只是一个特例。通常来说，属性还是应该声明为 private）
- */
-
-/**
- * Car 的例子
- */
-class Engine {
-    public void start() {}
-    public void rev() {}
-    public void stop() {}
-}
-class Wheel {
-    public void inflate(int psi) {}
-}
-class Window {
-    public void rollup() {}
-    public void rolldown() {}
-}
-class Door {
-    // 组合
-    public Window window = new Window();
-
-    public void open() {}
-    public void close() {}
-}
-class Car {
-    // 1个引擎、4个轮子、2扇门
-    public Engine engine = new Engine();
-    public Wheel[] wheels = new Wheel[4];
-    public Door left = new Door(), right = new Door();
-
-    public Car() {
-        for (int i = 0; i < 4; i++) {
-            wheels[i] = new Wheel();
-        }
-    }
-
-    public static void main(String[] args) {
-        Car car = new Car();
-        car.left.window.rollup();
-        car.wheels[0].inflate(72);
-    }
-}
-
-
-/**
- * 【再论组合和继承】
- * 尽管在教授 OOP 的过程中我们多次强调继承，但这并不意味着要尽可能使用它。
- * 恰恰相反，尽量少使用它，除非确实使用继承是有帮助的！
- *
- * 一种判断使用组合还是继承的最清晰的方法是问一问自己是否需要把新类向上转型为基类。
- * 如果必须向上转型，那么继承就是必要的，但如果不需要，则要进一步考虑是否该采用继承。
- *
- * （“多态”章节中将进一步进行讨论...）
  */
