@@ -1,5 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Or;
-
 /**
  * protected: 对于任何继承它的子类或在同一包中的类，它是可访问的
  *
@@ -7,6 +5,7 @@ import com.sun.org.apache.xpath.internal.operations.Or;
  *      将属性声明为 private 以一直保留更改底层实现的权利。
  *      然后通过 protected 控制类的继承者的访问权限。
  */
+
 class Villain {
     private String name;
     protected void set(String name) {
