@@ -31,10 +31,10 @@ class FinalData {
         this.id = id;
     }
 
-    // 可以作为编译常量
+    // 可以作为编译时常量
     private final int valueOne = 9;
     private static final int VALUE_TWO = 99;
-    // 典型的公共常量
+    // 典型的公共常量（也是编译时常量）
     private static final int VALUE_THREE = 39;
     // 不能作为编译常量（在编译时不知道它的值）
     private final int i4 = rand.nextInt(20);
@@ -80,7 +80,7 @@ class FinalData {
 /**
  * 【空白 final】
  * 空白 final 指的是没有初始化值的 final 属性。
- * 编译器确保空白 final 在使用前必须被初始化。（在构造器或初始化块中给 final 数据赋初值）
+ * 但是，编译器确要保空白 final 在使用前必须被初始化。（在构造器或初始化块中给 final 数据赋初值）
  * 这样既能使一个类的每个对象的 final 属性值不同，也能保持它的不变性。
  */
 class Poppet {
@@ -138,9 +138,7 @@ class BlankFinal {
  * 在参数列表中，将参数声明为 final 意味着在方法中不能改变参数指向的对象或基本变量
  */
 class Gizmo {
-    public void spin() {
-
-    }
+    public void spin() {}
 }
 class FinalArguments {
     void with(final Gizmo g) {
@@ -158,6 +156,15 @@ class FinalArguments {
     }
     int g(final int i) {
         return i + 1;
+    }
+
+    // final 修饰引用参数
+    void change(final Value v) {
+        // 编译错误，不能给 final 变量 v 赋值
+        // v = new Value(47);
+
+        // 但可以改变 v 的属性值
+        v.i++;
     }
 
     public static void main(String[] args) {
@@ -187,9 +194,12 @@ class FinalArguments {
  *
  * final：可以访问，但不可覆写
  * private：不能访问，也就不可覆写
+ * final 给的权限要更大一些（相比与 private，final 最起码可以访问）
  */
 class WithFinals {
     // [1] 与 g() 效果相同，private 默认就是 final 的
+    // 修饰方法时：private final 就等同于 private
+    // 注意一点，修饰变量时，private final 与 private 作用差大了！
     private final void f() {
         System.out.println("WithFinals.f()");
     }
