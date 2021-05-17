@@ -15,15 +15,15 @@ import java.util.Random;
  *    绑定发生在程序运行前（如果有的话，由编译器和链接器实现）。
  * 2）后期绑定
  *    在运行时根据对象的类型进行绑定，也称为动态绑定或运行时绑定。
- *    当一种语言实现了后期绑定，就必须具有某种机制在运行时能判断对象的类型，从而调用恰当的方法。
+ *    当一种语言实现了后期绑定，就必须具有某种机制在运行时能判断对象的类型（RTTI），从而调用恰当的方法。
  *    也就是说，编译器仍然不知道对象的类型（忘记了对象类型），但是方法调用机制能找到正确的方法体并调用。
  *    每种语言的后期绑定机制都不同，但是可以想到，对象中一定存在某种类型信息。
  *
- * （在 C 语言中只有这一种方法调用）
+ * （在 C 语言中只有前期绑定这一种方法调用）
  * Java 中除了 static 和 final 方法（private 方法也是隐式的 final）外，其他所有方法都是后期绑定。
  * 这意味着通常情况下，我们不需要判断后期绑定是否会发生——它自动发生。
  *
- * 再次解释”为什么将一个对象指明为 final ？“
+ * 再次解释”为什么将一个方法指明为 final 会提升性能？“
  * 因为有效地关闭了动态绑定，或者说告诉编译器不需要对其进行动态绑定。
  * 然而，现在使用 final 最好是为了设计使用，而不是为了提升性能。
  */
@@ -73,6 +73,7 @@ class Triangle2 extends Shape2 {
 class RandomShapes2 {
     private Random rand = new Random(47);
     public Shape2 get() {
+        // 随机生成形状是为了指出方法的后期绑定：在编译时，编译器不需要知道任何具体信息以进行正确的调用
         switch (rand.nextInt(3)) {
             default:
             case 0: return new Circle2();
@@ -130,6 +131,17 @@ class Derived extends PrivateOverride {
 /**
  * 【陷阱：属性与静态方法】
  * 只有普通的方法调用可以是多态的。（普通方法的动态绑定）
+ * 也就是说，属性不是后期绑定的，属性在编译时解析，属性没有“多态”行为。
+ *
+ * 为什么属性不是多态的？
+ * 因为任何属性访问都被编译器解析，因此不是多态的。
+ *
+ * 将属性设置为 private 的好处就是可以避免这种迷惑性。
+ *
+ */
+
+/**
+ * 属性不是后期绑定的，属性在编译时解析，属性没有“多态”行为：
  */
 class Super {
     public int field = 0;
@@ -165,44 +177,42 @@ class FieldAccess {
 }
 
 /**
- *
+ * 静态（static）的方法，行为不具有多态性：
  */
 class StaticSuper {
     public static String staticGet() {
-        return "StaticSuper.staticGet()";
+        return "父类的 StaticSuper.staticGet()";
     }
     public String dynamicGet() {
-        return "StaticSuper.dynamicGet()";
+        return "父类的 StaticSuper.dynamicGet()";
     }
 }
 class StaticSub extends StaticSuper {
     // @Override，编译出错：“重写方法不在基类中”
     public static String staticGet() {
-        return "StaticSub.staticGet()";
+        return "子类的 StaticSub.staticGet()";
     }
     @Override
     public String dynamicGet() {
+        System.out.println("子类的 dynamicGet()");
         return super.dynamicGet();
     }
 }
 class StaticPolymorphism {
     public static void main(String[] args) {
         StaticSuper sup = new StaticSuper();
-        System.out.println(StaticSuper.staticGet());
-        System.out.println(sup.dynamicGet());
+        System.out.println(StaticSuper.staticGet()); // 父类的 StaticSuper.staticGet()
+        System.out.println(sup.dynamicGet()); // 父类的 StaticSuper.dynamicGet()
 
         StaticSuper sub = new StaticSub();
-        System.out.println(StaticSuper.staticGet());
-        System.out.println(sub.dynamicGet());
+        // 尽管运行时类型是 StaticSub，但调用其父类的静态方法时，还是父类的
+        System.out.println(StaticSuper.staticGet()); // 父类的 StaticSuper.staticGet()
+        System.out.println(sub.staticGet()); // 父类的 StaticSuper.staticGet()
+        System.out.println(sub.dynamicGet()); // 子类的 dynamicGet()
 
         /**
-         * output:
-         * StaticSuper.staticGet()
-         * StaticSuper.dynamicGet()
-         * StaticSuper.staticGet()
-         * StaticSuper.dynamicGet()
-         *
          * 结论：静态的方法只与类关联，与单个的对象无关。
+         * 还有一个解释就是，static、final 的是 “前期绑定”。
          */
     }
 }

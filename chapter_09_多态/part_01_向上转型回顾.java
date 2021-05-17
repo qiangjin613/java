@@ -57,6 +57,7 @@ class Music2 {
     public static void tune(Instrument2 i) {
         i.play(Note.MIDDLE_C);
     }
+    // 注释掉下面的 3 个方法（使用多态），与重载下面的 3 个方法是一样的效果：
     public static void tune(Wind2 i) {
         i.play(Note.MIDDLE_C);
     }
