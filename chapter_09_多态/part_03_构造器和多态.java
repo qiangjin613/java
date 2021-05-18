@@ -1,6 +1,7 @@
 /**
  * 【构造器初始化顺序】
- * 0. 在所有事发生之前，分配给对象的存储空间会被初始化为二进制 0（或某些特殊类型与 0 等价的值）【这个是指在按生命初始化成员之前，在进栈之后吗？】
+ * 0. 在所有事发生之前，分配给对象的存储空间会被初始化为二进制 0（或某些特殊类型与 0 等价的值）
+ *    【这个是指在按生命初始化成员之前，在进栈之后吗？ 或者说，什么时候给对象变量分配内存呢？】
  * 1. 从 main 方法的类开始，看当前类有没有基类，如果有，依次进栈
  *    如：Sandwich、PortableLunch、Lunch、Meal 依次进栈
  * 2. 从栈顶弹出，然后按文本顺序初始化成员（成员变量、初始化块）后，再初始化构造器
@@ -31,6 +32,7 @@ class Lettuce {
 }
 class Lunch extends Meal {
     Lunch() {
+        // 隐式调用了基类 Meal 不带参数的构造器
         System.out.println("Lunch()");
     }
 }
@@ -60,6 +62,7 @@ class Sandwich extends PortableLunch {
  * 由于继承，如果有其他特殊的清理工作的话，就必须在派生类中重写 dispose() 方法。
  * 当重写 dispose() 方法时，记得调用基类的 dispose() 方法，否则基类的清理工作不会发生
  *
+ * 销毁的顺序应该与初始化的顺序相反，以防一个对象依赖另一个对象。
  * 销毁顺序：
  * 1）对于属性
  *    销毁顺序与初始化顺序相反。防止一个对象依赖另一个对象。
@@ -140,9 +143,12 @@ class Frog extends Animal {
 }
 
 /**
- * 比较复杂的情况：
+ * 在上述案例中，Frog 对象拥有自己的成员对象，它创建了这些成员，并且知道它们能存活多久，
+ * 所以它知道如何调用 dispose() 方法。然而
  * 当某个成员对象被其他一个或多个对象共享时，就不能只是简单地调用 dispose()。
- * 这里，也许就必须使用引用计数来跟踪仍然访问着共享对象的对象数量。
+ *
+ * 这是一个稍微复杂的情况：
+ * 也许就必须使用<strong>引用计数</strong>来跟踪仍然访问着共享对象的对象数量。
  */
 class Shared {
     // 记录该对象被共享的次数
@@ -209,6 +215,12 @@ class ReferenceCounting {
         }
     }
 }
+/*
+上述案例的注意事项：
+在将一个 shared 对象附着在类上时，必须记住调用 addRef()，
+而 dispose() 方法会跟踪引用数，以确定在何时真正地执行清理工作。
+【使用这种技巧需要加倍细心，但是如果需要清理正在共享的对象，你没有太多选择】
+ */
 
 
 /**
@@ -217,26 +229,26 @@ class ReferenceCounting {
  */
 class Glyph {
     void draw() {
-        System.out.println("Glyph.draw()");
+        System.out.println("父类 Glyph.draw()");
     }
     Glyph() {
-        System.out.println("Glyph() before draw()");
+        System.out.println("父类 Glyph() before draw()");
         // 在本例中，这里的方法调用，使用的是动态绑定的方法，
         // 但动态绑定的 draw() 使用了未初始化的 radius 变量
         draw();
-        System.out.println("Glyph() after draw()");
+        System.out.println("父类 Glyph() after draw()");
     }
 }
 class RoundGlyph extends Glyph {
     private int radius = 1;
     RoundGlyph(int r) {
         radius = r;
-        System.out.println("RoundGlyph.RoundGlyph(), radius = " + radius);
+        System.out.println("子类 RoundGlyph.RoundGlyph(), radius = " + radius);
     }
 
     @Override
     void draw() {
-        System.out.println("RoundGlyph.draw(), radius = " + radius);
+        System.out.println("子类 RoundGlyph.draw(), radius = " + radius);
     }
 }
 class PolyConstructors {
@@ -244,6 +256,10 @@ class PolyConstructors {
         new RoundGlyph(5);
     }
 }
+/*
+这里说明，至少在初始化基类 Glyph 之前，就将其派生类 RoundGlyph 的成员变量默认初始化了（系统进行的初始化）
+【这个问题其实是对象变量什么时候分配内存的问题】
+ */
 
 /**
  * Q：radius 的值并未初始化，为什么为 0？
