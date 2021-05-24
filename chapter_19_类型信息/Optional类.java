@@ -130,8 +130,9 @@ class Staff extends ArrayList<Position> {
         /* this 代表的是一个 ArrayList<Position> 对象 */
         for (Position position : this) {
             if (position.getTitle().equals(title)
-                    && position.getPerson().empty)
+                    && position.getPerson().empty) {
                 return true;
+            }
         }
         return false;
     }
