@@ -80,7 +80,7 @@ abstract class AbstractAccess {
  * 【小结】
  * 抽象方法结构刨析：（abstract 就是用来修饰方法的）
  * abstract 在一定程度上声明了“这个东西是要被重写的”与 private 本身的含义就是冲突的！
- * 而在抽象类中的 变量、初始化块、构造器 这些东西，派生类中对于这个压根谈不上重写，所以放在一起也就没有任何意义了。
+ * 而在抽象类中的 变量、类方法、初始化块、构造器 这些东西，派生类中对于这个压根谈不上重写，所以放在一起也就没有任何意义了。
  */
 abstract class AbstractDemo {
     // 变量：
@@ -110,6 +110,20 @@ abstract class AbstractDemo {
 
     public void m4() {}
     public abstract void m4a();
+
+    // 静态方法：
+    private static void m1s() {}
+
+    protected static void m2s() {}
+    /* abstract 不允许和 static 一起使用 */
+    // protected static abstract void m2as();
+
+    void m3s() {}
+    // static abstract void m3as();
+
+    public void m4s() {}
+    // public static abstract void m4as();
+
 
     // 初始化块：
     // abstract {

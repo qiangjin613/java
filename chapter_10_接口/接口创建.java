@@ -201,17 +201,50 @@ class Jim implements Jim1, Jim2 {
 
 /*
 【接口中的静态方法】
-
-
-
-
+Java 8 允许在接口中添加静态方法。
+能恰当地把工具功能置于接口中，从而操作接口，或者成为通用的工具。
  */
+interface Operations {
+    void execute();
 
+    static void runOps(Operations... ops) {
+        for (Operations op : ops) {
+            /* （多态调用）实现类中被重写具体方法的 execute() */
+            op.execute();
+        }
+    }
 
+    static void show(String msg) {
+        System.out.println(msg);
+    }
+}
+/*
+上述例子是模板方法的一个版本，runOps() 是一个模板方法。
+runOps() 使用可变参数列表，
+因而我们可以传入任意多的 Operation 参数并按顺序运行它们。
 
-
-
-
+使用如下：
+ */
+class Bing implements Operations {
+    @Override
+    public void execute() {
+        Operations.show("Bing");
+    }
+}
+class Crack implements Operations {
+    @Override
+    public void execute() {
+        Operations.show("Crack");
+    }
+}
+class Machine {
+    public static void main(String[] args) {
+        Operations.runOps(new Bing(), new Crack());
+    }
+}
+/*
+（接口中允许静态方法）这个特性是一项改善，因为它允许把静态方法放在更合适的地方。
+ */
 
 
 
