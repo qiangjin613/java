@@ -79,69 +79,8 @@ abstract class AbstractAccess {
 /**
  * 【小结】
  * 抽象方法结构刨析：（abstract 就是用来修饰方法的）
- * abstract 在一定程度上声明了“这个东西是要被重写的”与 private 本身的含义就是冲突的！
+ * abstract 在一定程度上声明了“这个东西是要被重写的”与 private|static 本身的含义就是冲突的！
  * 而在抽象类中的 变量、类方法、初始化块、构造器 这些东西，派生类中对于这个压根谈不上重写，所以放在一起也就没有任何意义了。
- */
-abstract class AbstractDemo {
-    // 变量：
-    private int i = 1;
-    protected int j = 2;
-    int k = 3;
-    public int p = 5;
-    private static int i2s = 1;
-    protected static int j2s = 2;
-    static int k2s = 3;
-    public static int p2s = 5;
-
-    // abstract 不能修饰变量：因为没意义！
-    // abstract int i = 23;
-    // abstract static int i = 23;
-
-    // 方法：
-    private void m1() {}
-    // private 和 abstract 的组合是非法的：
-    // private abstract void m1a();
-
-    protected void m2() {}
-    protected abstract void m2a();
-
-    void m3() {}
-    abstract void m3a();
-
-    public void m4() {}
-    public abstract void m4a();
-
-    // 静态方法：
-    private static void m1s() {}
-
-    protected static void m2s() {}
-    /* abstract 不允许和 static 一起使用 */
-    // protected static abstract void m2as();
-
-    void m3s() {}
-    // static abstract void m3as();
-
-    public void m4s() {}
-    // public static abstract void m4as();
-
-
-    // 初始化块：
-    // abstract {
-    //     System.out.println("");
-    // }
-    // abstract static {
-    //    System.out.println("");
-    // }
-
-    // 构造器：
-    AbstractDemo() {
-        i = 32;
-    }
-    // abstract AbstractDemo(int a) {
-    //     i = 32;
-    // }
-}
-
-/*
-创建抽象类和抽象方法是有帮助的，因为它们使得类的抽象性很明确，并能告知用户和编译器使用意图。
+ *
+ * 创建抽象类和抽象方法是有帮助的，因为它们使得类的抽象性很明确，并能告知用户和编译器使用意图。
  */

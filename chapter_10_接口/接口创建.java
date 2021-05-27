@@ -1,7 +1,9 @@
+import javax.swing.text.StyledEditorKit;
+
 /**
- * 在 Java 8 之前。接口只允许抽象方法。
+ * 在 Java 8 之前。接口只允许抽象方法（都是 public abstract 修饰的）
  *
- * 在这个时期的接口中，都不用为方法加上 abstract 关键字，
+ * 在这个时期的接口中，都不用为方法加上 public、abstract 关键字，
  * 因为在这个时期，接口方法只允许抽象方法！
  *
  * 因此，在 Java 8之前我们可以这么说：
@@ -9,11 +11,11 @@
  */
 interface PureInterface {
     int m1();
-    void m2();
+    public abstract void m2();
 }
 
 /*
-Java 8 之后的接口
+Java 8 之后的接口（开始允许接口包含默认方法和静态方法）
  */
 interface Concept {
     void idea1();
@@ -21,7 +23,9 @@ interface Concept {
 }
 
 /**
- * 因为默认中的接口方法被隐式指明为 static 和 final，
+ * 接口同样可以包含属性，这些属性被隐式指明为 static 和 final。
+ *
+ * 因为默认中的接口方法被隐式指明为 pulic abstract，
  * 所以当实现一个接口时，来自接口中的方法必须被定义为 public。
  * （**在继承时，编译器不允许可执行权限的降低**）
  */
@@ -41,6 +45,7 @@ class ImplementationC implements Concept {
 /*
 【默认方法】
 Java 8 为关键字 default 增加了一个新的用途（之前只用于 switch 语句和注解中）。
+（默认方法也默认为 public 的，也只能为 public）
 （默认方法比抽象类中的方法受到更多的限制，但是非常有用）
  */
 interface InterfaceWithDefault {
@@ -50,7 +55,7 @@ interface InterfaceWithDefault {
     default void defaultMethod() {
         System.out.println("接口的默认方法 newMethod()");
     }
-    default void defaultMethod2() {
+    public default void defaultMethod2() {
         /* 使用了多态，调用实现类的 secondMethod() */
         secondMethod();
         System.out.println("接口的默认方法 newMethod()2");
@@ -197,6 +202,11 @@ class Jim implements Jim1, Jim2 {
         new Jim().jim();
     }
 }
+/*
+在上述”冲突“中，jim() 方法虽然产生了冲突，但好在其返回值是相同的，
+要是冲突方法的返回值不同，就难办了！（现在没找到解决方法）
+ */
+
 
 
 /*
@@ -248,6 +258,61 @@ class Machine {
 
 
 
+/*
+【Instrument 作为接口】
+对乐器的例子使用接口进行改造
+ */
+interface Instrument3 {
+    /* 静态常量|编译时常量：（默认是 static final 的） */
+    int VALUE = 5;
+    default void play(Note n) {
+        System.out.println(this + ".play() " + n);
+    }
+    default void adjust() {
+        System.out.println("Adjusting " + this);
+    }
+}
+class Wind3 implements Instrument3 {
+    @Override
+    public String toString() {
+        return "Wind3";
+    }
+}
+class Stringed3 implements Instrument3 {
+    @Override
+    public String toString() {
+        return "Stringed3";
+    }
+}
+class Brass3 extends Wind3 {
+    @Override
+    public String toString() {
+        return "Brass3";
+    }
+}
+class Music3 {
+    static void tune(Instrument3 i) {
+        i.play(Note.MIDDLE_C);
+    }
+    static void tuneAll(Instrument3[] e) {
+        for (Instrument3 i : e) {
+            tune(i);
+        }
+    }
 
+    public static void main(String[] args) {
+        Instrument3[] orchestra = {new Wind3(), new Brass3(), new Stringed3()};
+        tuneAll(orchestra);
+    }
+}
+/*
+在这个例子中，
+无论是将其向上转型为称作 Instrument 的普通类，
+或称作 Instrument 的抽象类，
+还是叫作 Instrument 的接口，
+其行为都是相同的。
 
-
+事实上，
+从 tune() 方法上看不出来 Instrument 到底是一个普通类、抽象类，
+还是一个接口。
+ */
