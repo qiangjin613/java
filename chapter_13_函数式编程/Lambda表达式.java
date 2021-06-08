@@ -43,24 +43,45 @@ class LambdaExpressions {
 编写递归的 Lambda 表达式。
 注意：递归方法必须是实例变量或静态变量，否则会出现编译时错误。
  */
+interface IntCall {
+    int call(int arg);
+}
 
+/**
+ * 静态变量：阶乘函数
+ */
+class RecursiveFactorial {
+    static IntCall fact;
 
+    public static void main(String[] args) {
+        fact = n -> n == 0 ? 1 : n * fact.call(n - 1);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(fact.call(i));
+        }
+    }
+}
 
+/**
+ * 示例变量：Fibonacci 序列
+ */
+class RecursiveFibonacci {
+    IntCall fib;
+    RecursiveFibonacci() {
+        fib = n -> n == 0 ? 0 :
+                n == 1 ? 1 :
+                        fib.call(n - 1) + fib.call(n - 2);
+    }
 
+    int fibonacci(int n) {
+        return fib.call(n);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public static void main(String[] args) {
+        RecursiveFibonacci rf = new RecursiveFibonacci();
+        for (int i = 0; i < 10; i++) {
+            System.out.println(rf.fibonacci(i));
+            /* 或者 */
+            System.out.println(rf.fib.call(i));
+        }
+    }
+}
