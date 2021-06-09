@@ -259,7 +259,7 @@ class ClassFunctionals {
  * java.util.functional 中的接口是有限的。
  * 比如有 BiFunction，但也仅此而已。 如果需要三参数函数的接口怎么办？
  *
- * 自创 三参数函数的函数式接口
+ * 展示如何定义三参数函数的函数式接口：
  */
 @FunctionalInterface
 interface TriFunction<T, U, V, R> {
@@ -285,18 +285,41 @@ class TriFunctionTest {
 
 
 /**
- * 缺少基本类型的函数
+ * 【缺少基本类型的函数】
+ * 展示如何创建各种缺失的预定义组合：
  */
+class BiConsumerPermutations {
+    static BiConsumer<Integer, Double> bicid = (i, d) -> System.out.format("%d, %f%n", i, d);
+    static BiConsumer<Double, Integer> bicdi = (d, i) -> System.out.format("%d, %f%n", i, d);
+    static BiConsumer<Integer, Long> bicil = (d, l) -> System.out.format("%d, %d%n", l, d);
 
+    public static void main(String[] args) {
+        bicid.accept(47, 11.34);
+        bicdi.accept(22.45, 12);
+        bicil.accept(1, 111L);
+    }
+}
 
+/*
+在上述代码中，简单使用了合适的包装类型，自动拆装箱负责与基本类型之间的来回转换。
 
+可以使用包装类型和 Function 一起使用，而不去用各种针对基本类型的预定义接口。
+ */
+class FunctionWithWrapped {
+    public static void main(String[] args) {
+        /* 如果没有强制转换，则会收到错误消息：Integer cannot be converted to Double */
+        Function<Integer, Double> fid = i -> (double) i;
 
-
-
-
-
-
-
-
-
-
+        /* 使用 IntToDoubleFunction 就没有此类问题。 */
+        IntToDoubleFunction itdf = i -> i;
+        /*
+        IntToDoubleFunction 源码为：
+        @FunctionalInterface
+        public interface IntToDoubleFunction {
+            double applyAsDouble(int value);
+        }
+        用基本类型（IntToDoubleFunction）的唯一理由是
+        可以避免传递参数和返回结果过程中的自动拆装箱，进而提升性能。
+         */
+    }
+}
