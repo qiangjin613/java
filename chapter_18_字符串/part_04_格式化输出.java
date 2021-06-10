@@ -11,14 +11,13 @@ class SimpleFormat {
         double y = 5.322342;
         // [1] The old way:
         System.out.println("Row 1: [" + x + " " + y + "]");
-        // [2] The new wy:
-        System.out.format("Row 1: [%d %f]%n", x, y);
-        // [3] or
+        /* 等效于 */
+        System.out.print("Row 1: [" + x + " " + y + "]\n");
+        /* 其实就是包装的 format */
         System.out.printf("Row 1: [%d %f]%n", x, y);
-        // [4] or
+        System.out.format("Row 1: [%d %f]%n", x, y);
         System.out.println(String.format("Row 1: [%d %f]%n", x, y));
     }
-    // [1]、[2]、[3] 是等价的，或者使用 String.format() 格式化字符串
 }
 
 
@@ -39,13 +38,23 @@ class Turtle {
     }
 
     public static void main(String[] args) {
-        PrintStream outAlias = System.out;
         // 当创建一个 Formatter 对象时，需要向构造器传递一些信息，
         // 告诉它最终的结果将向哪里输出（控制台、文件、OutputStream 等）
+        /* 输出到控制台 */
         Turtle tommy = new Turtle("Tommy", new Formatter(System.out));
-        Turtle terry = new Turtle("Terry", new Formatter(outAlias));
         tommy.move(0, 0);
+
+        /* 输出到控制台 */
+        PrintStream outAlias = System.out;
+        Turtle terry = new Turtle("Terry", new Formatter(outAlias));
         terry.move(4, 8);
+
+        /* 输出到 StringBuilder */
+        Formatter ff = new Formatter(new StringBuilder());
+        ff.format("%s The Turtle is at (%d, %d)%n", "name", 0, 11);
+        ff.format("%s The Turtle is at (%d, %d)%n", "name", 0, 11);
+        ff.format("%s The Turtle is at (%d, %d)%n", "name", 0, 11);
+        System.out.println(ff.toString());
     }
 }
 
@@ -53,6 +62,13 @@ class Turtle {
 /**
  * 【格式化修饰符】
  * 通用语法：%[argument_index$][flags][width][.precision]conversion
+ * 说明：
+ * flags        对其方式，默认右对齐，可使用 - 左对齐
+ * width        最小长度
+ * .precision   用于 String 时，输出字符的最大数量
+ *              用于浮点数时，它表示小数部分要显示出来的位数（默认是 6 位小数）
+ *              用于整数时，触发异常
+ *
  * 购物收据案例
  */
 class ReceiptBuilder {
@@ -97,6 +113,8 @@ class ReceiptBuilder {
  *
  *      %n  换行符（与 \n 效果相同）
  *      %h  散列码（十六进制）
+ *
+ *      %%  字面值 %
  */
 class Conversion {
     public static void main(String[] args) {
@@ -136,7 +154,6 @@ class Conversion {
 class DatabaseException extends Exception {
     public DatabaseException(int transactionID, int queryID, String message) {
         super(String.format("(t%d, q%d) %s", transactionID, queryID, message));
-        // 在 String.format() 内部，也是创建了一个 Formatter 对象
     }
 
     public static void main(String[] args) {
@@ -147,3 +164,10 @@ class DatabaseException extends Exception {
         }
     }
 }
+
+/*
+【小结】
+System.out.format()
+String.format()
+都是在其内部创建了一个 Formatter 对象
+ */

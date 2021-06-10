@@ -58,6 +58,10 @@
 
 
 
-
+# 版本更新
+Java SE5
+1. 引入 StringBuilder（在这之前用的是 StringBuffer）
+2. 引入 format() 方法和 C 语言中 printf() 风格的格式化输出功能（其实是把 format 包装了一下）
+3. 新增了 Scanner 类
 
 

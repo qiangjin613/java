@@ -20,7 +20,7 @@ class SimpleRead {
             String name = input.readLine();
             System.out.println(name);
 
-            System.out.println("How old are you? " + "What is your favorite double?");
+            System.out.println("How old are you? What is your favorite double?");
             System.out.println("(input: <age> <double>)");
             String numbers = input.readLine();
             System.out.println(numbers);
@@ -59,6 +59,13 @@ class BetterRead {
         System.out.format("My favorite double is %f.", favorite / 2);
     }
 }
+/*
+在上述代码中，没有用 try 捕获 IOException，
+因为 Scanner 有一个假设，在输入结束时会抛出 IOException，
+所以 Scanner 会把 IOException 吞掉。
+ */
+
+
 
 
 /**
@@ -68,8 +75,10 @@ class BetterRead {
 class ScannerDelimiter {
     public static void main(String[] args) {
         Scanner scanner = new Scanner("12, 42, 78, 99, 42");
+        /* delimiter() 获取当前分隔符 */
         System.out.println("'" + scanner.delimiter() + "'");
 
+        /* useDelimiter 设置 Scanner 的分隔符 */
         scanner.useDelimiter("\\s*,\\s*");
         while (scanner.hasNextInt()) {
             System.out.println(scanner.nextInt());
@@ -97,6 +106,7 @@ class ThreatAnalyzer {
         String pattern = "(\\d+[.]\\d+[.]\\d+[.]\\d+)@(\\d{2}/\\d{2}/\\d{4})";
         while (scanner.hasNext(pattern)) {
             scanner.next(pattern);
+            /* 获取正则表达式的组数据 */
             MatchResult match = scanner.match();
             String ip = match.group(1);
             String date = match.group(2);
@@ -124,12 +134,14 @@ class ReplacingStringTokenizer {
             System.out.print(stoke.nextToken() + " ");
         }
         System.out.println();
+
         // [2] 使用正则表达式
         System.out.println(Arrays.toString(input.split(" ")));
+
         // [3] 使用 Scanner
         Scanner scanner = new Scanner(input);
         while (scanner.hasNext()) {
-            System.out.println(scanner.next() + " ");
+            System.out.print(scanner.next() + " ");
         }
     }
 }
