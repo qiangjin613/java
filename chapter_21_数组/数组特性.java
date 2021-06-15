@@ -125,6 +125,21 @@ class CollectionComparison {
 数组唯一剩下的优势就是效率。
  */
 
+/**
+ * 数组初始化时使用自动装箱：
+ */
+class AutoboxingArrays {
+    public static void main(String[] args) {
+        Integer[][] a = {
+                {1, 2, 3, 4, 5, 6, },
+                {1, 2, 3, },
+                {1, 2, 3, 4, 5, },
+        };
+        System.out.println(Arrays.deepToString(a));
+    }
+}
+
+
 
 /*
 【一个打印数组的实用程序】
