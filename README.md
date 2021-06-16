@@ -72,3 +72,82 @@ Java SE5
 > 明确两点：元素在什么位置下会被初始化，会被初始化为何值？
 
 数组、变量
+
+
+
+
+
+### 反编译查看 .class 对应的代码、字节码
+JDK 自带的 `javap` 工具：（在要进行反编译的 .class 文件目录下执行）
+```shell script
+> javap -cp main Explore.class
+Compiled from "values方法的神秘之处.java"
+final class Explore extends java.lang.Enum<Explore> {
+  public static final Explore HERE;
+  public static final Explore THERE;
+  public static Explore[] values();
+  public static Explore valueOf(java.lang.String);
+  static {};
+}
+> javap -p Explore.class
+Compiled from "values方法的神秘之处.java"
+final class Explore extends java.lang.Enum<Explore> {
+  public static final Explore HERE;
+  public static final Explore THERE;
+  private static final Explore[] $VALUES;
+  public static Explore[] values();
+  public static Explore valueOf(java.lang.String);
+  private Explore();
+  static {};
+}
+> javap -c Explore.class
+Compiled from "values方法的神秘之处.java"
+final class Explore extends java.lang.Enum<Explore> {
+  public static final Explore HERE;
+
+  public static final Explore THERE;
+
+  public static Explore[] values();
+    Code:
+       0: getstatic     #1                  // Field $VALUES:[LExplore;
+       3: invokevirtual #2                  // Method "[LExplore;".clone:()Ljava/lang/Object;
+       6: checkcast     #3                  // class "[LExplore;"
+       9: areturn
+
+  public static Explore valueOf(java.lang.String);
+    Code:
+       0: ldc           #4                  // class Explore
+       2: aload_0
+       3: invokestatic  #5                  // Method java/lang/Enum.valueOf:(Ljava/lang/Class;Ljava/lang/String;)Ljava/lang/Enum;
+       6: checkcast     #4                  // class Explore
+       9: areturn
+
+  static {};
+    Code:
+       0: new           #4                  // class Explore
+       3: dup
+       4: ldc           #7                  // String HERE
+       6: iconst_0
+       7: invokespecial #8                  // Method "<init>":(Ljava/lang/String;I)V
+      10: putstatic     #9                  // Field HERE:LExplore;
+      13: new           #4                  // class Explore
+      16: dup
+      17: ldc           #10                 // String THERE
+      19: iconst_1
+      20: invokespecial #8                  // Method "<init>":(Ljava/lang/String;I)V
+      23: putstatic     #11                 // Field THERE:LExplore;
+      26: iconst_2
+      27: anewarray     #4                  // class Explore
+      30: dup
+      31: iconst_0
+      32: getstatic     #9                  // Field HERE:LExplore;
+      35: aastore
+      36: dup
+      37: iconst_1
+      38: getstatic     #11                 // Field THERE:LExplore;
+      41: aastore
+      42: putstatic     #1                  // Field $VALUES:[LExplore;
+      45: return
+}
+```
+
