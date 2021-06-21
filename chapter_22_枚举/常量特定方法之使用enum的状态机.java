@@ -20,11 +20,13 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 自动售贷机是一个很好的状态机的例子：
  */
 enum Input {
+    /* 输入的各种状态 */
     NICKEL(5), DIME(10), QUARTER(25), DOLLAR(100),
     TOOTHPASTE(200), CHIPS(75), SODA(100), SOAP(50),
     ABORT_TRANSACTION {
@@ -85,7 +87,7 @@ enum Category {
         }
     }
 
-    /* 根据 input 获取 分类 */
+    /* 为 input 获取生成恰当的分类 */
     public static Category categorize(Input input) {
         return categories.get(input);
     }
@@ -93,9 +95,9 @@ enum Category {
 
 // 自动售贷机
 class VendingMachine {
-    private static State state = State.RESTING;
-    private static int amount = 0;
     private static Input selection = null;
+    private static int amount = 0;
+    private static State state = State.RESTING;
 
     enum StateDuration { TRANSIENT }
     enum State {
@@ -103,6 +105,7 @@ class VendingMachine {
         RESTING {
             @Override
             void next(Input input) {
+                /* 休息时：用户塞入钞票、机器停止 */
                 switch (Category.categorize(input)) {
                     case MONEY:
                         amount += input.amount();
@@ -114,7 +117,7 @@ class VendingMachine {
                 }
             }
         },
-        /* 加钱 */
+        /* 用户塞入钞票 */
         ADDING_MONEY {
             @Override
             void next(Input input) {
@@ -198,12 +201,10 @@ class VendingMachine {
 
     public static void main(String[] args) {
         Supplier<Input> gen = new RandomInputSupplier();
-        if (args.length == 1) {
-            gen = new FileInputSupplier(args[0]);
-        }
         run(gen);
     }
 }
+
 
 class RandomInputSupplier implements Supplier<Input> {
     @Override
@@ -212,26 +213,35 @@ class RandomInputSupplier implements Supplier<Input> {
     }
 }
 
-class FileInputSupplier implements Supplier<Input> {
-    private Iterator<String> input;
-    FileInputSupplier(String fileName) {
-        try {
-            input = Files.lines(Paths.get(fileName))
-                    .skip(1)
-                    .flatMap(s -> Arrays.stream(s.split(";")))
-                    .map(String::trim)
-                    .collect(Collectors.toList())
-                    .iterator();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+/*
+由于用 switch 语句从 enum 实例中进行选择是最常见的一种方式
+（请注意，为了使 enum 在 switch 语句中的使用变得简单，我们是需要付出其他代价的），
+所以，我们经常遇到这样的问题：
+    将多个 enum 进行分类时，“我们希望在什么 enum 中使用 switch 语句？”
+我们通过 VendingMachine 的例子来研究一下这个问题。
 
-    @Override
-    public Input get() {
-        if (!input.hasNext()) {
-            return null;
-        }
-        return Enum.valueOf(Input.class, input.next().trim());
-    }
-}
+对于每一个 State，我们都需要在输入动作的基本分类中进行查找：
+用户塞入钞票，选择了某个货物，操作被取消，以及机器停止。
+然而，在这些基本分类之下，我们又可以塞人不同类型的钞票，可以选择不同的货物。
+Category enum 将不同类型的 Input 进行分组，
+因而，可以使用 categorize0 方法为 switch 语句生成恰当的 Cateroy 实例。
+并且，该方法使用的 EnumMap 确保了在其中进行查询时的效率与安全。
+
+如果仔细研究 VendingMachine 类，
+就会发现每种状态的不同之处，以及对于输入的不同响应，
+其中还有两个瞬时状态。
+在 run() 方法中，
+状态机等待着下一个 Input，并一直在各个状态中移动，直到它不再处于瞬时状态。
+
+通过 Generator 对象，
+我们可以使用 Supplier 对象来测试 VendingMachine，
+RandomInputSupplier，它会不停地生成除了 SHUT-DOWN 之外的各种输入。
+通过长时间地运行 RandomInputSupplier，可以起到健全测试（sanity test）的作用，
+能够确保该状态机不会进入一个错误状态。
+
+这种设计有一个缺陷，
+它要求 enum State 实例访问的 VendingMachine 属性必须声明为 static，
+这意味着，你只能有一个 VendingMachine 实例。
+（不过如果我们思考一下实际的（嵌入式 Java）应用，这也许并不是一个大问题，
+因为在一台机器上，我们可能只有一个应用程序）
+ */
