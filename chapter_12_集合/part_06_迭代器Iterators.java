@@ -1,5 +1,4 @@
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /*
 在任何集合中，都必须有某种方式可以插入元素并再次获取它们。
@@ -53,23 +52,114 @@ class SimpleIteration {
         for (int i = 0; i < 6; i++) {
             System.out.print(it.next() + " ");
             it.remove();
+            /*
+             在调用 remove() 之前必须先调用 next()
+             */
+            // it.remove();
         }
         System.out.println("\n" + pets);
     }
 }
 /*
-有了 Iterator 就不必再为集合中的元素数量
+有了 Iterator 就不必再为集合中的元素数量操心了，这是由 hasNext() 和 next() 关心的事情。
+ */
+
+/**
+ * 现在考虑创建一个 display() 方法，它不必知晓集合的确切类型：
+ */
+class CrossCollectionIteration {
+    public static void display(Iterator<Integer> itr) {
+        while (itr.hasNext()) {
+            Integer p = itr.next();
+            System.out.print(p + " ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        List<Integer> ints = new ArrayList<>(16);
+        Collections.addAll(ints, 1, 6, 4, 4, 2, 6, 3);
+        LinkedList<Integer> intsLL = new LinkedList<>(ints);
+        HashSet<Integer> intsHS = new HashSet<>(ints);
+        TreeSet<Integer> intsTS = new TreeSet<>(ints);
+        display(ints.iterator());
+        display(intsLL.iterator());
+        display(intsHS.iterator());
+        display(intsTS.iterator());
+    }
+}
+/*
+display() 方法不包含任何有关它所遍历的序列的类型信息（不管是什么类型的盒子）。
+
+展示了 Iterator 的真正威力：
+    将遍历序列的操作与该序列的底层结构分离。
+出于这个原因，我们有时会说：迭代器统一了对集合的访问方式。
+ */
+
+
+/**
+ * 使用 Iterable 接口生成上一个示例的更简洁版本，
+ * 描述了“可以产生 Iterator 的任何东西”：
+ */
+class CrossCollectionIteration2 {
+    public static void display(Iterable<Integer> it) {
+        Iterator<Integer> itr = it.iterator();
+        while (itr.hasNext()) {
+            Integer p = itr.next();
+            System.out.print(p + " ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        List<Integer> ints = new ArrayList<>(16);
+        Collections.addAll(ints, 1, 6, 4, 4, 2, 6, 3);
+        LinkedList<Integer> intsLL = new LinkedList<>(ints);
+        HashSet<Integer> intsHS = new HashSet<>(ints);
+        TreeSet<Integer> intsTS = new TreeSet<>(ints);
+        display(ints);
+        display(intsLL);
+        display(intsHS);
+        display(intsTS);
+    }
+}
+/*
+显然，在使用上更简单。
  */
 
 
 
+/*
+【ListIterator】
+ListIterator 是一个更强大的 Iterator 子类型，它只能由各种 List 类生成。
 
+Iterator 只能向前移动，而 ListIterator 可以双向移动。
+还可以生成相对于迭代器在列表中指向的当前位置的后一个和前一个元素的索引，
+并且可以使用 set() 方法替换它访问过的最近一个元素，
+可以通过调用 listIterator() 方法来生成指向 List 开头处的 ListIterator ，
+还可以通过调用 listIterator(n) 创建一个一开始就指向列表索引号为 n 的元素处的 ListIterator。
+ */
+class ListIteration {
+    public static void main(String[] args) {
+        List<Pet> pets = Pets.list(8);
+        ListIterator<Pet> it = pets.listIterator();
+        while (it.hasNext()) {
+            System.out.println(it.next() + ", " + it.nextIndex() + ", " + it.previousIndex() + ";");
+        }
+        System.out.println();
 
+        while (it.hasPrevious()) {
+            System.out.print(it.previous().id() + " ");
+        }
+        System.out.println();
 
-
-
-
-
-
-
-
+        System.out.println(pets);
+        // 从位置 3 开始替换 List 中的所有 Pet 对象：
+        it = pets.listIterator(3);
+        while (it.hasNext()) {
+            it.next();
+            it.set(Pets.get());
+        }
+        System.out.println(pets);
+    }
+}
