@@ -71,18 +71,90 @@ class InterfaceVsIterator {
 这使得代码更加清晰。
  */
 
+/**
+ * 当需要实现一个不是 Collection 的外部类时，
+ * 由于让它去实现 Collection 接口可能非常困难或麻烦，
+ * 因此使用 Iterator 就会变得非常吸引人。
+ *
+ * 例如，如果我们通过继承一个持有 Pet 对象的类来创建一个 Collection 的实现，
+ * 那么我们必须实现 Collection 所有的方法，
+ * 即使我们不在 display() 方法中使用它们，也必须这样做。
+ * 虽然这可以通过继承 AbstractCollection 而很容易地实现，
+ * 但是无论如何还是要被强制去实现 iterator() 和 size() 方法，
+ * 这些方法 AbstractCollection 没有实现，
+ * 但是 AbstractCollection 中的其它方法会用到：
+ * （下面继承一个 AbstractCollection，并实现 iterator() 和 size() 方法）
+ */
+class CollectionSequence extends AbstractCollection<Pet>{
+    private Pet[] pets = Pets.array(8);
 
+    @Override
+    public Iterator<Pet> iterator() {
+        return new Iterator<Pet>() {
+            private int index = 0;
+            @Override
+            public boolean hasNext() {
+                return index < pets.length;
+            }
 
+            @Override
+            public Pet next() {
+                return pets[index++];
+            }
 
+            // remove() 方法是一个“可选操作”，这里可以不必实现它，如果你调用它，它将抛出异常。
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
 
+    @Override
+    public int size() {
+        return pets.length;
+    }
 
+    public static void main(String[] args) {
+        CollectionSequence c = new CollectionSequence();
+        InterfaceVsIterator.display(c);
+        InterfaceVsIterator.display(c.iterator());
+    }
+}
+/*
+这个例子表明，如果实现了 Collection ，就必须实现 iterator()，
+并且拿只实现 iterator() 与继承 AbstractCollection 相比，花费的代价只有略微减少。
 
+但是，如果类已经继承了其他的类，那么就不能继承再 AbstractCollection 了。
+在这种情况下，要实现 Collection ，就必须实现该接口中的所有方法（是比较麻烦的）。
+此时，继承并且提供创建迭代器的能力要比实现 Collection 容易得多：
+ */
+class PetSequence {
+    protected Pet[] pets = Pets.array(8);
+}
+// 一个不是 Collection 的类继承了其他类，这时想要提供迭代器可以使用如下方法：
+class NonCollectionSequence extends PetSequence {
+    public Iterator<Pet> iterator() {
+        return new Iterator<Pet>() {
+            private int index = 0;
+            @Override
+            public boolean hasNext() {
+                return index < pets.length;
+            }
 
+            @Override
+            public Pet next() {
+                return pets[index++];
+            }
+        };
+    }
 
-
-
-
-
-
-
-
+    public static void main(String[] args) {
+        NonCollectionSequence nc = new NonCollectionSequence();
+        InterfaceVsIterator.display(nc.iterator());
+    }
+}
+/*
+生成 Iterator 是将序列与消费该序列的方法连接在一起耦合度最小的方式，
+并且与实现 Collection 相比，它在序列类上所施加的约束也少得多。
+ */
