@@ -10,8 +10,13 @@ public class AA {
     public static void main(String[] args) {
         new A();
         new A(1);
-        new A(1,2);
+        A a = new A(1, 2);
+        a.publicObjMethod();
+        a.protectedObjMethod();
+        a.defaultObjMethod();
 
-        A a = A.makeA3Args();
+        A.publicClassMethod();
+        A.protectedClassMethod();
+        A.defaultClassMethod();
     }
 }
