@@ -18,3 +18,10 @@ public class A {
     static void defaultClassMethod() {}
     private void privateClassMethod() {}
 }
+
+class OtherClass {
+    public static void main(String[] args) {
+        // 不可使用 A 的 private 构造器
+        // A a = new A(1, 2, 3);
+    }
+}
