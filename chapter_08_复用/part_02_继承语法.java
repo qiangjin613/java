@@ -5,6 +5,7 @@
 
 class Cleanser {
     // 虽然 s 是 privte 的，但依旧可以通过一些方法在其他类里改变 s
+    // 比如，public 的 setter 方法改变 s 的值
     private String s = "Cleanser";
     public void append(String a) {
         s += a;

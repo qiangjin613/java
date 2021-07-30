@@ -70,11 +70,13 @@ class Shape {
 }
 class Circle extends Shape {
     Circle(int i) {
+        // 先初始化基类，再初始化当前类
         super(i);
         System.out.println("Drawing Circle");
     }
     @Override
     void dispose() {
+        // 这里反过来：先清理当前类，再清理基类
         System.out.println("Erasing Circle");
         super.dispose();
     }
