@@ -82,3 +82,33 @@ class SpaceShipDelegation {
         protector.forward(100);
     }
 }
+/*
+也可以使用“半委托”实现飞船的组装。
+
+
+只需将成员对象 SpaceShipControls 声明为 public 即可（“半委托”的一种）。
+有时让类的用户直接访问到新类中的组合成分是有意义的。
+成员对象隐藏了具体实现，所以这是安全的。
+当用户知道你正在组装一组部件时，会使得接口更加容易理解。
+（但是，这这只是一个特例。通常来说，属性还是应该声明为 private）
+ */
+
+
+/**
+ * 半委托例子：
+ */
+class SpaceShipDelegation2 {
+    private String name;
+    public SpaceShipControls controls = new SpaceShipControls();
+    public SpaceShipDelegation2(String name) {
+        this.name = name;
+    }
+
+    public static void main(String[] args) {
+        SpaceShipDelegation2 protector = new SpaceShipDelegation2("NSEA Protector");
+        /*
+        在这里明确指出了 forward() 方法是哪个类的对象调用的。（半委托的优点）
+         */
+        protector.controls.forward(100);
+    }
+}

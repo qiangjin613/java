@@ -161,6 +161,12 @@ class Bart extends Homer {
     }
 }
 
+class SubBart extends Bart {
+    double doh(double d) {
+        return 1.0d;
+    }
+}
+
 class Hide {
     public static void main(String[] args) {
         Bart b = new Bart();
@@ -170,6 +176,15 @@ class Hide {
         b.doh('x');
         b.doh(1.0f);
         b.doh(new Milhouse());
+
+        SubBart sb = new SubBart();
+        /*
+        参数      调用方法
+        1.0     doh(double d)
+        1.0d    doh(double d)
+        1.0f    doh(float f)
+         */
+        sb.doh(1.0);
     }
 }
 
