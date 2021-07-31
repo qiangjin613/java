@@ -21,6 +21,14 @@ public class B extends A {
         super.protectedObjMethod();
     }
 
+    void method() {
+        publicObjMethod();
+        protectedObjMethod();
+
+        A.publicClassMethod();
+        A.protectedClassMethod();
+    }
+
     public static void main(String[] args) {
         // 0.首先，对于创建对象，貌似在其他类中创建对象，只能调用该类的 public 构造器
         A a = new A();
