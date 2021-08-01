@@ -1,17 +1,26 @@
-/**
- * 每个类的编译代码都存在与自己独立的文件中。
- * 该文件只有在使用程序代码时才会被加载。
+/*
+每个类的编译代码都存在与自己独立的文件中。
+该文件只有在使用程序代码时才会被加载。
  *
- * 一般可以说“类的代码在首次使用时加载“。
- * 通常是指创建类的第一个对象，或者是访问了类的 static 属性或方法。
- * （构造器也是一个 static 方法尽管它的 static 关键字是隐式的）
- * 因此，准确地说，一个类当它任意一个 static 成员被访问时，就会被加载。
+一般可以说“类的代码在首次使用时加载“。
+通常是指创建类的第一个对象，或者是访问了类的 static 属性或方法。
+（构造器也是一个 static 方法尽管它的 static 关键字是隐式的）
+因此，准确地说，一个类当它任意一个 static 成员被访问时，就会被加载。
  *
- * 首次使用时就是 static 初始化发生时。
- * 所有的 static 对象和 static 代码块在加载时按照文本顺序依次初始化。
- * static 变量只被初始化一次。
+首次使用时就是 static 初始化发生时。
+所有的 static 对象和 static 代码块在加载时按照文本顺序依次初始化。
+static 变量只被初始化一次。
  */
+
 class Insect {
+
+    {
+        // ”非法的前向引用“
+        // System.out.println(i);
+        // System.out.println(j);
+        // System.out.println(K);
+    }
+
     private int i = 9;
     protected int j;
     // 编译时常量
@@ -22,8 +31,23 @@ class Insect {
         j = 39;
     }
 
+
+    static {
+        // 对于 static 数据，也会出现”非法的前向引用“现象
+        // System.out.println(statici);
+        // System.out.println(x1);
+
+        System.out.println("Insect 的第 1 个 static 块执行");
+    }
+
+    // 当运行到这里时，发现没有进行初始化，编译器为 statici 进行隐式赋值
     private static int statici;
     private static int x1 = printInit("static Insect.x1 initialized");
+
+    static {
+        System.out.println(statici);
+        System.out.println("Insect 的第 2 个 static 块执行");
+    }
 
     static void method() {
         int i;
@@ -54,8 +78,29 @@ class Beetle extends Insect {
     }
 
     public static void main(String[] args) {
-        System.out.println("Beetle main() 开始执行");
-        Beetle b = new Beetle();
+        /*
+        调用 Beetle 类的 main 方法，发现 Beetle extend Insect，
+        于是先初始化基类的 static 数据。
+        （由于并未创建对象，所以这时并未执行二者的构造器）
+        [output]
+        Insect 的第 1 个 static 块执行
+        static Insect.x1 initialized
+        123
+        Insect 的第 2 个 static 块执行
+        static Beetle.x2 initialized
+        由此可知，static 数据的加载是按照文本顺序先基类后派生类进行加载的。
+         */
+
+        System.out.println("\nBeetle main() 开始执行\n");
+        new Beetle();
+        /*
+        [output]
+        i = 9, j = 0, K = 47
+        Beetle.k.initialized
+        k = 47
+        j = 39
+        由此可知，对象数据的加载是先初始化成员变量，再加载构造器的。
+         */
     }
 }
 
@@ -79,5 +124,5 @@ class Beetle extends Insect {
 初始化顺序的总结：
 1. 先是类相关的数据，然后是对象相关的数据
 2. 有父类的时候要先处理父类
-3. 对于类/对象数据，会有默认初始化这一环节
+3. 对于类/对象数据，会有默认初始化这一环节（如果没有在定义时赋初值，就会进行隐式赋值）
  */

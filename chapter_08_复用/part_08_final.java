@@ -1,10 +1,16 @@
 import java.util.Random;
 
-/**
- * 根据上下文环境，Java 的关键字 final 的含义有些微的不同，
- * 但通常它指的是“这是不能被改变的”。
+/*
+根据上下文环境，Java 的关键字 final 的含义有些微的不同，
+但通常它指的是“这是不能被改变的”。
  *
- * 防止改变有两个原因：设计或效率。因为这两个原因相差很远，所以有可能误用关键字 final。
+防止改变有两个原因：设计或效率。
+因为这两个原因相差很远，所以有可能误用关键字 final。
+ *
+final 可能使用的 3 个地方：
+    1.数据（变量、参数）
+    2.方法
+    3.类
  */
 
 /**
@@ -15,7 +21,7 @@ import java.util.Random;
  *
  * final 修饰基本类型和引用的区别：
  *      1) 基本类型：数值恒定不变
- *      2) 引用：引用恒定不变，但引用所指向的对象却没有限定。（数组也是对象）
+ *      2) 引用：引用恒定不变（引用所指向的对象却没有限定）（数组也是对象）
  */
 class Value {
     int i;
@@ -36,6 +42,7 @@ class FinalData {
     private static final int VALUE_TWO = 99;
     // 典型的公共常量（也是编译时常量）
     private static final int VALUE_THREE = 39;
+
     // 不能作为编译常量（在编译时不知道它的值）
     private final int i4 = rand.nextInt(20);
     static final int INT_5 = rand.nextInt(20);
@@ -80,14 +87,18 @@ class FinalData {
 /**
  * 【空白 final】
  * 空白 final 指的是没有初始化值的 final 属性。
- * 但是，编译器确要保空白 final 在使用前必须被初始化。（在构造器或初始化块中给 final 数据赋初值）
  * 这样既能使一个类的每个对象的 final 属性值不同，也能保持它的不变性。
+ *
+ * 但是，编译器确要保空白 final 在使用前必须被初始化。
+ * （在构造器或初始化块/静态初始化块中给 final 数据赋初值）
  */
 class Poppet {
     private int i;
+
     Poppet(int i) {
         this.i = i;
     }
+
     @Override
     public String toString() {
         return "Poppet{" +
@@ -115,6 +126,12 @@ class BlankFinal {
     public BlankFinal(int x) {
         j = x;
         p = new Poppet(x);
+    }
+
+    // 空白的公共常量在静态初始化块中初始化
+    private static final int ii;
+    static {
+        ii = 11;
     }
 
     @Override
@@ -149,7 +166,6 @@ class FinalArguments {
         g = new Gizmo();
         g.spin();
     }
-
     void f(final int i) {
         // 编译错误，不能给 final 变量 i 赋值
         // i++;
@@ -169,37 +185,42 @@ class FinalArguments {
 
     public static void main(String[] args) {
         FinalArguments bf = new FinalArguments();
-        bf.without(null);
-        bf.with(null);
+        Gizmo g = new Gizmo();
+        bf.without(g);
+        g = new Gizmo();
+        bf.with(g);
     }
 }
 
 
-/**
- * 【final 方法】
- * 使用 final 方法的原因有两个：
- * 1) 给方法上锁
- *    防止子类通过覆写方法的行为。这是出于继承的考虑，确保方法的行为不会因继承而改变。
- * 2) 效率
- *    现在基本上是不用这种方法来提升效率的！
- *    应该让编译器和 JVM 处理性能问题，只有在为了明确禁止覆写方法时才使用 final。
+/*
+【final 方法】
+使用 final 方法的原因有两个：
+1) 给方法上锁
+   防止子类通过覆写方法的行为。这是出于继承的考虑，确保方法的行为不会因继承而改变。
+2) 效率
+   现在基本上是不用这种方法来提升效率的！
+   应该让编译器和 JVM 处理性能问题，只有在为了明确禁止覆写方法时才使用 final。
  */
-
 
 /**
  * 【final 和 private】
  * 类中所有的 private 方法都隐式地指定为 final。
+ *
  * 因为不能访问 private 方法，所以不能覆写它。
  * 可以给 private 方法添加 final 修饰，但是并不能给方法带来额外的含义。
  *
  * final：可以访问，但不可覆写
  * private：不能访问，也就不可覆写
  * final 给的权限要更大一些（相比与 private，final 最起码可以访问）
+ *
+ * 注意一点，当同时使用 private final 修饰数据、方法时：
+ * 数据：不能改变
+ * 方法：不能重写
  */
 class WithFinals {
     // [1] 与 g() 效果相同，private 默认就是 final 的
     // 修饰方法时：private final 就等同于 private
-    // 注意一点，修饰变量时，private final 与 private 作用差大了！
     private final void f() {
         System.out.println("WithFinals.f()");
     }
@@ -222,9 +243,13 @@ class OverridingPrivate extends WithFinals {
         System.out.println("OverridingPrivate.g()");
     }
     // 编译错误，不能覆盖 WithFinals 的 final h() 方法
-    // public void h() {
-    //     System.out.println("OverridingPrivate.h()");
-    // }
+//     public void h() {
+//         System.out.println("OverridingPrivate.h()");
+//     }
+    // 对于重载没有限制
+    public void h(int i) {
+
+    }
 }
 
 class OverridingPrivate2 extends OverridingPrivate {
@@ -245,6 +270,7 @@ class FinalOverridingIllusion {
         OverridingPrivate op = op2;
         op.h();
         // 但是不可以使用方法：
+        // （即使其运行时类型有自己的 f()、g() 方法也不能使用）
         // op.f();
         // op.g();
 
@@ -255,14 +281,13 @@ class FinalOverridingIllusion {
         // wf.g();
     }
 }
-
-/**
- * 一段需要理解的话，解释 private 的奥秘：
- * 如果一个方法是 private 的，它就不是基类接口的一部分。
- * 它只是隐藏在类内部的代码，且恰好有相同的命名而已。
- * 但是如果你在派生类中以相同的命名创建了 public，protected 或包访问权限的方法，
- * 这些方法与基类中的方法没有联系，你没有覆写方法，只是在创建新的方法而已。
- * 由于 private 方法无法触及且能有效隐藏，除了把它看作类中的一部分，其他任何事物都不需要考虑到它。
+/*
+一段需要理解的话，解释 private 的奥秘：
+如果一个方法是 private 的，它就不是基类接口的一部分。
+它只是隐藏在类内部的代码，且恰好有相同的命名而已。
+但是如果你在派生类中以相同的命名创建了 public，protected 或包访问权限的方法，
+这些方法与基类中的方法没有联系，你没有覆写方法，只是在创建新的方法而已。
+由于 private 方法无法触及且能有效隐藏，除了把它看作类中的一部分，其他任何事物都不需要考虑到它。
  */
 
 
@@ -283,9 +308,10 @@ final class Dinosaur {
     int i = 7;
     final int j = 1;
     SmallBrain x = new SmallBrain();
-    // [2] final 类的方法隐式指定为 fianl
+    // [2] final 类的方法隐式指定为 fianl（因为该类无法被继承，f() 方法也就无法被重写）
     void f() {}
 }
+
 // 不能继承 fianl 类 Dinosaur
 // class Further extends Dinosaur {}
 
@@ -299,3 +325,18 @@ class Jurassic {
         n.x = new SmallBrain();
     }
 }
+
+/*
+【final 忠告】
+在设计类时将一个方法指明为 final 看上去是明智的。
+你可能会觉得没人会覆写那个方法。有时这是对的。
+ *
+但请留意你的假设。
+通常来说，预见一个类如何被复用是很困难的，特别是通用类。
+如果将一个方法指定为 final，可能会防止其他程序员的项目中通过继承来复用你的类，
+而这仅仅是因为你没有想到它被以那种方式使用。
+ *
+Java 标准类库就是一个很好的例子。
+尤其是 Vector 类和 Hashtable 类，
+这种不规则的情况造成用户需要做更多的工作——这是对粗糙的设计和代码的又一讽刺。
+ */
