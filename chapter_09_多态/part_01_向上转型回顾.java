@@ -13,6 +13,7 @@ class Instrument2 {
         System.out.println("Instrument2.play() " + n);
     }
 }
+// Wind2 对于 Instrument2 来说，是“纯粹的继承”
 class Wind2 extends Instrument2 {
     // 覆盖基类方法
     @Override
@@ -40,6 +41,7 @@ class Music {
  * 【忘掉对象类型】
  * 当向上转型发生时就会“忘调”对象类型，如果 tune() 使用 Wind 不是更为直观吗？
  * 按照这种推理，再增加 Stringed 和 Brass 这两种 Instrument。
+ * （在不使用“多态”的时候，方法调用会更加直观）
  */
 class Stringed extends Instrument2 {
     @Override

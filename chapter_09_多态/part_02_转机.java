@@ -1,31 +1,31 @@
 import java.util.Random;
 
-/**
- * 对于忘记类型的多态机制，编译器是如何知道引用指向的是哪个类型呢？
- * ”绑定“机制解释了答案。
+/*
+对于忘记类型的多态机制，编译器是如何知道引用指向的是哪个类型呢？
+”绑定“机制解释了答案。
  */
 
 
-/**
- * 【方法调用绑定】
- * 将一个方法调用和一个方法主体关联起来称作绑定。
+/*
+【方法调用绑定】
+将一个方法调用和一个方法主体关联起来称作绑定。
  *
- * 根据”绑定“发生的时期，可分为：前期绑定、后期绑定。
- * 1）前期绑定
- *    绑定发生在程序运行前（如果有的话，由编译器和链接器实现）。
- * 2）后期绑定
- *    在运行时根据对象的类型进行绑定，也称为动态绑定或运行时绑定。
- *    当一种语言实现了后期绑定，就必须具有某种机制在运行时能判断对象的类型（RTTI），从而调用恰当的方法。
- *    也就是说，编译器仍然不知道对象的类型（忘记了对象类型），但是方法调用机制能找到正确的方法体并调用。
- *    每种语言的后期绑定机制都不同，但是可以想到，对象中一定存在某种类型信息。
+根据”绑定“发生的时期，可分为：前期绑定、后期绑定。
+1）前期绑定
+   绑定发生在程序运行前（如果有的话，由编译器和链接器实现）。
+2）后期绑定
+   在运行时根据对象的类型进行绑定，也称为动态绑定或运行时绑定。
+   当一种语言实现了后期绑定，就必须具有某种机制在运行时能判断对象的类型（RTTI），从而调用恰当的方法。
+   也就是说，编译器仍然不知道对象的类型（忘记了对象类型），但是方法调用机制能找到正确的方法体并调用。
+   每种语言的后期绑定机制都不同，但是可以想到，对象中一定存在某种类型信息。
  *
- * （在 C 语言中只有前期绑定这一种方法调用）
- * Java 中除了 static 和 final 方法（private 方法也是隐式的 final）外，其他所有方法都是后期绑定。
- * 这意味着通常情况下，我们不需要判断后期绑定是否会发生——它自动发生。
+（在 C 语言中只有前期绑定这一种方法调用）
+Java 中除了 static 和 final 方法（private 方法也是隐式的 final）外，其他所有方法都是后期绑定。
+这意味着通常情况下，我们不需要判断后期绑定是否会发生——它自动发生。
  *
- * 再次解释”为什么将一个方法指明为 final 会提升性能？“
- * 因为有效地关闭了动态绑定，或者说告诉编译器不需要对其进行动态绑定。
- * 然而，现在使用 final 最好是为了设计使用，而不是为了提升性能。
+再次解释”为什么将一个方法指明为 final 会提升性能？“
+因为有效地关闭了动态绑定，或者说告诉编译器不需要对其进行动态绑定。
+然而，现在使用 final 最好是为了设计使用，而不是为了提升性能。
  */
 
 
@@ -33,7 +33,7 @@ import java.util.Random;
  * 【产生正确的行为】
  * 形状的例子：
  *      Shape2 形状
- *      RandomShapes 工厂
+ *      RandomShapes 一个简单的工厂类
  */
 class Shape2 {
     public void draw() {}
@@ -69,16 +69,26 @@ class Triangle2 extends Shape2 {
         System.out.println("Triangle2.erase()");
     }
 }
+class OtherShape2 extends Triangle2 {
+    @Override
+    public void draw() {
+        System.out.println("OtherShape2.draw()");
+    }
+    /*
+    如果运行时类型是 OtherShape2 时，
+    调用 shape2.erase(); 的时候调用的将会是其基类 Triangle2 的 erase()
+     */
+}
 
 class RandomShapes2 {
     private Random rand = new Random(47);
     public Shape2 get() {
         // 随机生成形状是为了指出方法的后期绑定：在编译时，编译器不需要知道任何具体信息以进行正确的调用
-        switch (rand.nextInt(3)) {
-            default:
+        switch (rand.nextInt(13)) {
             case 0: return new Circle2();
             case 1: return new Square2();
             case 2: return new Triangle2();
+            default: return new OtherShape2();
         }
     }
     public Shape2[] array(int sz) {
@@ -97,6 +107,7 @@ class Shpes2 {
         for (Shape2 shape2 : gen.array(9)) {
             // 所有的方法都是通过动态绑定运行的
             shape2.draw();
+            shape2.erase();
         }
     }
 }
