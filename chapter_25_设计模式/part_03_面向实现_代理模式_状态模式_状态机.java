@@ -84,6 +84,8 @@ class ProxyDemo {
 
 /**
  * 【状态模式】
+ * 状态模式向代理对象添加了更多的实现，
+ * 以及在代理对象的生命周期内从一个实现切换到另一种实现的方法:
  */
 interface StateBase {
     void f();
@@ -185,8 +187,89 @@ class StateDemo {
     您可以将Java引用视为一种保护代理，因为它控制在堆上实例对象的访问(例如，确保不使用空引用)。
  */
 
+/*
+在设计模式中，代理模式和桥接模式并不是相互关联的，因为它们被赋予(我认为是任意的)不同的结构。
+桥接模式，特别是使用一个单独的实现，但这似乎对我来说是不必要的，
+除非你确定该实现是你无法控制的(当然有可能，但是如果您编写所有代码，那么没有理由不从单基类的优雅中受益)。
+此外，只要代理对象控制对其“前置”对象的访问，代模式理就不需要为其实现使用相同的基类。
+不管具体情况如何，在代理模式和桥接模式中，代理对象都将方法调用传递给具体实现对象。
+ */
 
 
+/*
+【状态机】
+桥接模式允许程序员更改实现，状态机利用一个结构来自动地将实现更改到下一个。
+当前实现表示系统所处的状态，系统在不同状态下的行为不同(因为它使用桥接模式)。
+基本上，这是一个利用对象的“状态机”。
+将系统从一种状态移动到另一种状态的代码通常是模板方法模式，如下例所示:
+ */
+interface State2 {
+    void run();
+}
 
+abstract class StateMachine2 {
+    protected State2 currentState;
 
+    protected abstract boolean changeState();
 
+    // 模板方法：
+    protected final void runAll() {
+        while (changeState()) {
+            currentState.run();
+        }
+    }
+}
+
+class Wash2 implements State2 {
+    @Override
+    public void run() {
+        System.out.println("Washing");
+    }
+}
+class Spin2 implements State2 {
+    @Override
+    public void run() {
+        System.out.println("Spinning");
+    }
+}
+class Rinse2 implements State2 {
+    @Override
+    public void run() {
+        System.out.println("Rinsing");
+    }
+}
+
+class Washer2 extends StateMachine2 {
+    private int i = 0;
+    // 状态列表：
+    private State2[] states = {
+            new Wash2(),
+            new Spin2(),
+            new Rinse2(),
+            new Spin2()};
+
+    Washer2() {
+        runAll();
+    }
+
+    @Override
+    protected boolean changeState() {
+        if (i < states.length) {
+            currentState = states[i++];
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+class StateMachineDemo {
+    public static void main(String[] args) {
+        new Washer2();
+    }
+}
+/*
+在这里，控制状态的类(本例中是状态机)负责决定下一个状态。
+然而，状态对象本身也可以决定下一步移动到什么状态，通常基于系统的某种输入。
+这是更灵活的解决方案。
+ */
