@@ -19,9 +19,10 @@ class Insect {
         // System.out.println(i);
         // System.out.println(j);
         // System.out.println(K);
+        System.out.println("Insect 的第 1 个初始化块");
     }
 
-    private int i = 9;
+    private int i = f();
     protected int j;
     // 编译时常量
     private final int K = 47;
@@ -29,6 +30,15 @@ class Insect {
     Insect() {
         System.out.println("i = " + i + ", j = " + j + ", K = " + K);
         j = 39;
+    }
+
+    {
+        System.out.println("Insect 的第 2 个初始化块");
+    }
+
+    int f() {
+        System.out.println("InsectObj.f() 调用...");
+        return 9;
     }
 
 
@@ -95,11 +105,16 @@ class Beetle extends Insect {
         new Beetle();
         /*
         [output]
+        Insect 的第 1 个初始化块
+        InsectObj.f() 调用...
+        Insect 的第 2 个初始化块
         i = 9, j = 0, K = 47
         Beetle.k.initialized
         k = 47
         j = 39
-        由此可知，对象数据的加载是先初始化成员变量，再加载构造器的。
+        由此可知，对象数据的加载顺序：
+        是先按照文本顺序加载成员变量、（实例）初始化块，
+        再加载构造器。
          */
     }
 }
