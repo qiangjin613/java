@@ -1,5 +1,3 @@
-import javax.swing.text.StyledEditorKit;
-
 /**
  * 在 Java 8 之前。接口只允许抽象方法（都是 public abstract 修饰的）
  *
@@ -10,24 +8,31 @@ import javax.swing.text.StyledEditorKit;
  *      interface 关键字产生一个完全抽象的类，没有提供任何实现。
  */
 interface PureInterface {
+    // 接口同样可以包含属性，这些属性被隐式指明为 static 和 final。
+    public static final int i = 1;
+
+    // 默认方法修饰符就是 public abstract 的
     int m1();
     public abstract void m2();
 }
 
 /*
 Java 8 之后的接口（开始允许接口包含默认方法和静态方法）
+ *
+接口的基本概念仍然没变，介于类型之上、实现之下。
+接口与抽象类最明显的区别可能就是使用上的惯用方式。
+接口的典型使用是代表一个类的类型或一个形容词，如 Runnable 或 Serializable；
+而抽象类通常是类层次结构的一部分或一件事物的类型。
  */
 interface Concept {
     void idea1();
     void idea2();
 }
-
-/**
- * 接口同样可以包含属性，这些属性被隐式指明为 static 和 final。
- *
- * 因为默认中的接口方法被隐式指明为 pulic abstract，
- * 所以当实现一个接口时，来自接口中的方法必须被定义为 public。
- * （**在继承时，编译器不允许可执行权限的降低**）
+/*
+使用 implements 关键字使一个类遵循某个特定接口（或一组接口），
+它表示：
+    接口只是外形，现在我要说明它是如何工作的。
+除此之外，它看起来像继承。
  */
 class ImplementationC implements Concept {
     @Override
@@ -40,6 +45,11 @@ class ImplementationC implements Concept {
         System.out.println("实现类的 idea2()");
     }
 }
+/*
+因为默认中的接口方法被隐式指明为 pulic abstract，
+所以当实现一个接口时，来自接口中的方法必须被定义为 public。
+（**在继承时，编译器不允许可执行权限的降低**）
+ */
 
 
 /*
