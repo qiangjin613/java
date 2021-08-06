@@ -3,7 +3,7 @@
 选择用抽象类还是用接口变得更加令人困惑。
 
 下面先做出 抽象类、接口 的区分，
-再进行总结如何使用及什么情况下使用抽象类|接口
+再进行总结如何使用及什么情况下使用抽象类、接口
  */
 
 /*
@@ -13,13 +13,14 @@
 3.构造器
 4.方法
 
-abstract 不能修饰变量、初始化块、构造器；
-abstract 不能修饰 private 方法，不能和 private、static连用；
+abstract 不能修饰变量、初始化块、构造器；abstract 只能修饰方法；
+abstract 不能修饰 private 方法，不能和 private、static 连用；
 
 Illegal combination of modifiers:
     'abstract' and 'private'
     'abstract' and 'static'
     'abstract' and 'final'
+（因为 abstract 就意味着这个方法要被覆写从而去实现具体的方法体，与 private、static、final 不可覆写冲突）
 
 最后，抽象类除了不能被实例化，其他方面和普通类没有什么区别。
  */
@@ -131,12 +132,16 @@ abstract class AbstractClass {
         System.out.println(AbstractClass.j2s);
     }
 }
-
+/*
+final 的重复：
+'private' method declared 'final'
+'static' method declared 'final'
+ */
 
 
 /*
 【接口】
-1.变量：都是 public、static、final 修饰的常量
+1.变量：都是 public static final 修饰的常量
 2.初始化块  （x）
 3.构造器   （x）
 4.方法
@@ -144,16 +149,12 @@ abstract class AbstractClass {
 接口中的变量都是 public static final 的；
 接口中的实例方法都是 public abstract 的、静态方法都是 public static 有方法体的具体方法。
 Java 8 之后接口允许包含默认方法（给实例的）和静态方法（给类的）
-
-
-Illegal combination of modifiers:
-    'static' and 'final'
  */
 interface InterfaceDemo {
     /**
      * 1.变量
      */
-    int I = 1;
+    public static final int I = 1;
 
 
     /**
@@ -173,12 +174,17 @@ interface InterfaceDemo {
      */
     /* 实例方法（默认是 abstract 的） */
     public abstract void m4();
+
     /* 类方法 */
-    public static void m3s() {}
+    public static void m3s() {
+        System.out.println("接口的 static 方法");
+    }
+
     /* 没有 final 方法 */
+
     /* 默认方法（默认为 public 的，也只能为 public） */
     public default void me() {
-
+        System.out.println("接口的 final 方法");
     }
 }
 
@@ -187,7 +193,7 @@ interface InterfaceDemo {
 /*
 【小结】
 组合（继承|实现）
-    接口：新类可以组合多个接口
+    接口：新类可以组合多个接口（接口的所有数据都是 public 的：包括属性和方法）
     抽象类：只能继承单一抽象类
 状态（变量）
     接口：不能包含属性（除了静态属性，不支持对象状态）

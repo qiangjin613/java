@@ -8,7 +8,7 @@
  */
 
 /**
- * 一个使用接口”完全解耦“的例子
+ * 一个”完全解耦“的例子：
  */
 class Processor {
     public String name() {
@@ -47,14 +47,14 @@ class Applicator {
 /*
 本例中，创建一个能根据传入的参数类型从而具备不同行为的方法称为策略设计模式。
 策略就是传入的对象，是变化的部分。
-在 main() 中，展示了三种不同的应用于 String s 上的策略。
+在 main() 中，展示了两种不同的应用于 String s 上的策略。
  */
 
 
 /*
-另一个例子：
+另一个例子，
+假设现在发现了一组电子滤波器，它们看起来好像能使用 Applicator 的 apply() 方法：
  */
-
 class Waveform2 {
     private static long counter;
     private final long id = counter++;
@@ -108,42 +108,27 @@ class BandPass extends Filter2 {
     }
 }
 /*
-不能将 Applicator 的 apply() 方法应用在 Filter 类上
+Filter 类与 Processor 类具有相同的接口元素，但是因为它不是继承自 Processor，
+因此，不能将 Applicator 的 apply() 方法应用在 Filter 类上。
+ *
+主要是因为 Applicator 的 apply() 方法和 Processor 过于耦合，
+这阻止了 Applicator 的 apply() 方法被复用。
+另外要注意的一点是 Filter 类中 process() 方法的输入输出都是 Waveform。
+ *
+但如果 Processor 是一个接口，
+那么限制就会变得松动到足以复用 Applicator 的 apply() 方法，
+用来接受那个接口参数。
  */
 
 
-
-
-/*
-使用接口改写 Processor 类
+/**
+ * 下面是修改后的 Processor 和 Applicator 版本：
  */
 interface Processor2 {
     default String name() {
         return getClass().getSimpleName();
     }
     Object process(Object input);
-}
-class Applicator2 {
-    public static void apply(Processor2 p, Object s) {
-        System.out.println("Using Processor " + p.name());
-        System.out.println(p.process(s));
-    }
-}
-/*
-遵循接口编写类：
- */
-interface StringProcessor2 extends Processor2 {
-    /* 这个方法的声明是不必要的，即使这里没有这个方法，也不会报错，这里返回值还是用了协变返回类型 */
-    @Override
-    String process(Object input);
-
-    String S = "If she weighs the same as a duck, she's made of wood";
-
-    /* 可以在接口中定义 main() 方法 */
-    static void main(String[] args) {
-        Applicator2.apply(new Upcase2(), S);
-        Applicator2.apply(new Downcase2(), S);
-    }
 }
 class Upcase2 implements Processor2 {
     // 返回协变类型
@@ -158,6 +143,35 @@ class Downcase2 implements StringProcessor2 {
         return ((String) input).toLowerCase();
     }
 }
+
+class Applicator2 {
+    public static void apply(Processor2 p, Object s) {
+        System.out.println("Using Processor " + p.name());
+        System.out.println(p.process(s));
+    }
+    public static final String S = "If she weighs the same as a duck, she's made of wood";
+    public static void main(String[] args) {
+        Applicator2.apply(new Upcase2(), S);
+        Applicator2.apply(new Downcase2(), S);
+    }
+}
+/*
+复用代码的第一种方式是客户端程序员遵循接口编写类，像这样：
+ */
+interface StringProcessor2 extends Processor2 {
+    /* 这个方法的声明是不必要的，即使这里没有这个方法，也不会报错，这里返回值还是用了协变返回类型 */
+    @Override
+    String process(Object input);
+
+    String S = "If she weighs the same as a duck, she's made of wood";
+
+    /* 可以在接口中定义 main() 方法 */
+    static void main(String[] args) {
+        Applicator2.apply(new Upcase2(), S);
+        Applicator2.apply(new Downcase2(), S);
+    }
+}
+
 
 /*
 使用适配器设计模式继续优化。

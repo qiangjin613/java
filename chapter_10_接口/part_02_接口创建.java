@@ -54,7 +54,7 @@ class ImplementationC implements Concept {
 
 /*
 【默认方法】
-Java 8 为关键字 default 增加了一个新的用途（之前只用于 switch 语句和注解中）。
+Java 8 为关键字 default 增加了一个新的用途（default 之前只用于 switch 语句和注解中）。
 （默认方法也默认为 public 的，也只能为 public）
 （默认方法比抽象类中的方法受到更多的限制，但是非常有用）
  */
@@ -96,6 +96,14 @@ class Implementation2 implements InterfaceWithDefault {
 增加默认方法的极具说服力的理由是：
     它允许在不破坏已使用接口的代码的情况下，在接口中增加新的方法。
     （增加默认方法，对于其实现类而言，不需要额外的工作）
+ *
+比如，在 interface InterfaceWithDefault 中添加了一个
+    default void newMethod() {
+        System.out.println("newMethod");
+    }
+的方法，所有与接口有关的代码能正常工作，不受影响，
+而且这些实现了 InterfaceWithDefault 的类还可以调用新的 newMethod() 方法。
+ *
 默认方法有时也被称为守卫方法或虚拟扩展方法。
  */
 
@@ -103,11 +111,11 @@ class Implementation2 implements InterfaceWithDefault {
 /*
 【多继承】
 多继承意味着一个类可能从多个父类型中继承特征和特性。
-
+ *
 Java 在设计之初，C++ 的多继承机制饱受诟病。
 Java 过去是一种严格要求单继承的语言：只能继承自一个类（或抽象类），但可以实现任意多个接口。
 在 Java 8 之前，接口没有包袱，它只是方法外貌的描述，没有具体的功能实现。
-
+ *
 但在 Java 8 后，Java 通过默认方法具有了某种多继承的特性。
 结合带有默认方法的接口意味着结合了多个基类中的行为。（具有了某种多继承的特性）
 因为接口中仍然不允许存在属性（只有静态属性，不适用），所以属性仍然只会来自单个基类或抽象类，
@@ -142,10 +150,9 @@ class MultipleInheritance {
 
 /*
 现在，做些在 Java 8 之前不可能完成的事：结合多个源的实现。
-
+ *
 只要基类方法中的方法名和参数列表不同，就能工作得很好。
-
-但在两个接口中有相同的方法签名，就会得到编译器错误。
+但在两个接口中有相同的_方法签名_，就会得到编译器错误。
  */
 interface Bob1 {
     default void bob() {
@@ -214,7 +221,8 @@ class Jim implements Jim1, Jim2 {
 }
 /*
 在上述”冲突“中，jim() 方法虽然产生了冲突，但好在其返回值是相同的，
-要是冲突方法的返回值不同，就难办了！（现在没找到解决方法）
+要是冲突方法的返回值不同，就难办了！
+（现在没找到解决方法，这可能是Java的一个bug）
  */
 
 
@@ -236,6 +244,11 @@ interface Operations {
 
     static void show(String msg) {
         System.out.println(msg);
+    }
+
+    // 既然允许 static 了，main 也是可以的：
+    public static void main(String[] args) {
+        System.out.println("接口里的 main()");
     }
 }
 /*
@@ -273,9 +286,9 @@ class Machine {
 对乐器的例子使用接口进行改造
  */
 interface Instrument3 {
-    /* 静态常量|编译时常量：（默认是 static final 的） */
-    int VALUE = 5;
-    default void play(Note n) {
+    /* 静态常量|编译时常量：（默认是 public static final 的） */
+    public static final int VALUE = 5;
+    public default void play(Note n) {
         System.out.println(this + ".play() " + n);
     }
     default void adjust() {
@@ -317,11 +330,16 @@ class Music3 {
 }
 /*
 在这个例子中，
+若不使用默认方法：
+    使用 static 就无法使用对象方法；
+    使用抽象方法，就要在所有实现类中去实现接口的抽象方法。
+ *
+还有一点：
 无论是将其向上转型为称作 Instrument 的普通类，
 或称作 Instrument 的抽象类，
 还是叫作 Instrument 的接口，
 其行为都是相同的。
-
+ *
 事实上，
 从 tune() 方法上看不出来 Instrument 到底是一个普通类、抽象类，
 还是一个接口。

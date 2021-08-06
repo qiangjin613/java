@@ -6,7 +6,8 @@ import java.util.Scanner;
 接口最吸引人的原因之一是相同的接口可以有多个实现。
 
 接口的一种常见用法是前面提到的策略设计模式。
-可以说：“只要对象遵循接口，就可以调用方法”
+可以说：“只要对象遵循接口，就可以调用方法”，
+这使得方法更加灵活，通用，并更具可复用性。
  */
 
 /**
@@ -52,13 +53,15 @@ class RandomString implements Readable {
 
 /*
 考虑：假设有一个类没有实现 Readable 接口，怎样才能让 Scanner 作用于它呢？
-可是这个也没有使用到 Scanner 呀！
+可是这个也没有使用到 Scanner 呀！（这个在下面的 AdaptedRandomDoubles ）
  */
 interface RandomDoubles {
     Random rand = new Random(47);
+
     default double next() {
         return rand.nextDouble();
     }
+
     static void main(String[] args) {
         RandomDoubles rd = new RandomDoubles() {};
         for (int i = 0; i < 7; i++) {

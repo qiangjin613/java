@@ -63,7 +63,9 @@ class HorrorShow {
     }
 }
 
+
 /*
+【结合接口时的命名冲突】
 当实现多个接口时可能会存在一个小陷阱：方法冲突（这一点在 default 方法中提到过）
  */
 interface I1 {

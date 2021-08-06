@@ -11,7 +11,9 @@ interface Canfly{
     void fly();
 }
 class ActionCharacter {
-    public void fight() {}
+    public void fight() {
+        System.out.println("ActionCharacter.fight()");
+    }
 }
 
 class Hero extends ActionCharacter implements CanFight, CanFight2, CanSwim, Canfly {
@@ -20,6 +22,13 @@ class Hero extends ActionCharacter implements CanFight, CanFight2, CanSwim, Canf
     因为在 ActionCharacter 中覆写了 fight()
     所以在这里的 CanFight, CanFight2 的 fight() 冲突也就解决了。
      */
+
+    // 如果 class ActionCharacter 的方法与 implements Canfly 签名相同，
+    // 但 ActionCharacter 却不是 public 的，这时就要在实现类 Hero 中重写 Canfly 接口的相关方法。
+//    @Override
+//    public void fight() {
+//        System.out.println("Hero.fight()");
+//    }
 
     @Override
     public void swim() {}

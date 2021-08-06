@@ -291,6 +291,12 @@ class FinalOverridingIllusion {
 由于 private 方法无法触及且能有效隐藏，除了把它看作类中的一部分，其他任何事物都不需要考虑到它。
  */
 
+/*
+final 的重复：
+'private' method declared 'final' private方法就是final的
+'static' method declared 'final'  static方法就是final的
+ */
+
 
 /**
  * 【final 类】
