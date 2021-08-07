@@ -4,10 +4,11 @@
  */
 
 /**
+ * 【类的内部接口】
  * 一些有趣的特性：
  */
 class A {
-    // 1.内部类使用内部接口
+    // 1.类的内部接口
     interface B {
         void f();
     }
@@ -32,6 +33,7 @@ class A {
         public void f() {}
     }
 
+    /* 作为一种新添加的方式，这种接口的权限修饰符并未进行限制 */
     private interface D {
         void f();
     }
@@ -47,7 +49,6 @@ class A {
         }
     }
 
-    /* 作为一种新添加的方式，接口也可以是 private 的 */
     private D dRef;
     public D getD() {
         return new DImp2();
@@ -56,8 +57,17 @@ class A {
         dRef = d;
         dRef.f();
     }
+
+    // 被各种修饰符修饰的内部接口：
+    public interface InnerInterface {}
+    protected interface InnerInterface2 {}
+    interface InnerInterface3 {}
+    private interface InnerInterface4 {}
 }
 
+/**
+ * 【接口的内部接口】
+ */
 interface E {
     interface G {
         void f();
@@ -74,18 +84,19 @@ interface E {
 }
 
 class NestingInterfaces {
-    /* 组合 class A 中的 interface B */
+    /* 组合 class A 中的 interface B（B 是被 friendly 修饰的接口） */
     public class BImp implements A.B {
         @Override
         public void f() {}
     }
 
+    /* A.C 是被 public 修饰的接口 */
     class CImp implements A.C {
         @Override
         public void f() {}
     }
 
-    /* 不能组合 class A 中 private interface D */
+    /* 不能组合 class A 中被 private 修饰的内部接口 A.D */
     // class DImp implements A.D {}
 
     /* 这里实现了接口 E，不用实现接口 E 内的其他接口 */
@@ -121,6 +132,5 @@ class NestingInterfaces {
 
         /* 这样是可行的：使用 public 方法 */
         a.receive(a.getD());
-
     }
 }
