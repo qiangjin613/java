@@ -1,4 +1,5 @@
 /**
+ * 【使用 .this】
  * 如果需要使用外部类对象，可以使用 OuterClass.this 来获得外部类对象
  * （类型检查，在编译期就被知晓并受到检查，因此没有任何运行时开销）
  */
@@ -24,7 +25,7 @@ class DotThis {
 }
 
 /**
- * .new 使用的例子：
+ * 【使用 .new】
  */
 class DotNew {
     class Inner {}
@@ -32,6 +33,10 @@ class DotNew {
     public static void main(String[] args) {
         DotNew dn = new DotNew();
         DotNew.Inner inner = dn.new Inner();
+
+        DotThis dt = new DotThis();
+        DotThis.Inner dti = dt.new Inner();
+        dti.outer().f();
     }
 }
 
@@ -53,7 +58,7 @@ class Parcel3 {
             return i;
         }
     }
-    class Destination {
+    private class Destination {
         private String label;
         Destination(String whereTo) {
             label = whereTo;
@@ -64,8 +69,42 @@ class Parcel3 {
     }
     public static void main(String[] args) {
         Parcel3 p = new Parcel3();
-        Parcel3.Contents c = p.new Contents();
-        Parcel3.Destination d = p.new Destination("Ta");
+
+        /*
+        可以看到，
+        在Contents、Destination 类外部，
+        也可以使用他们的 private 成员。
+        这是为何？
+         */
+        Parcel3.Contents pc = p.new Contents();
+        pc.i++;
+        System.out.println(pc.value());
+
+        Parcel3.Destination pd = p.new Destination("Ta");
+        pd.label += ".";
+        System.out.println(pd.readLabel());
+    }
+}
+
+class Test {
+    public static void main(String[] args) {
+        Parcel3 p = new Parcel3();
+
+        /*
+        可以看到，
+        在Contents、Destination 类外部，
+        也可以使用他们的 private 成员。
+        这是为何？
+         */
+        Parcel3.Contents pc = p.new Contents();
+        // 在这里并不能像上面的 Parcel3 外部类一样，肆无忌惮地调用其内部类的 private 成员
+        // pc.i++;
+        System.out.println(pc.value());
+
+        // 不可以在 Test 包中创建 Parcel3 的 private 的内部类 Destination
+//        Parcel3.Destination pd = p.new Destination("Ta");
+//        pd.label += ".";
+//        System.out.println(pd.readLabel());
     }
 }
 

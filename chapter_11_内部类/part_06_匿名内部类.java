@@ -15,6 +15,7 @@ class Parcel7 {
     public static void main(String[] args) {
         Parcel7 p = new Parcel7();
         Contents c = p.contents();
+        System.out.println(c.value());
     }
 }
 
@@ -54,16 +55,24 @@ class Wrapping {
 }
 /*
 尽管 Wrapping 只是一个具有具体实现的普通类，但它还是被导出类当作公共“接口”来使用。
-（类似于匿名继承的感觉）
  */
 class Parcel8 {
     public Wrapping wrapping(int x) {
+        /*
+        这个就像是一个匿名类 extend Wrapping 的感觉
+         */
         return new Wrapping(x) {
             @Override
             public int value() {
                 return super.value() * 47;
             }
         };
+    }
+
+    public static void main(String[] args) {
+        Parcel8 p = new Parcel8();
+        Wrapping w = p.wrapping(11);
+        System.out.println(w.value());
     }
 }
 
@@ -91,7 +100,7 @@ class Parcel9 {
 
 
 /*
-不一样的地方：
+注意到上例有一个不一样的地方：
 如果在定义一个匿名内部类时，
 它要使用一个外部环境（在本匿名内部类之外定义）对象，
 那么编译器会要求其（该对象）参数引用是 final 或者是 “effectively final”
@@ -172,8 +181,7 @@ class Parcel10 {
 /*
 对于匿名类而言，实例初始化的实际效果就是构造器。
 （当然它受到了限制-你不能重载实例初始化方法，所以你仅有一个这样的构造器）
-
-
+ *
 匿名内部类与正规的继承相比有些受限，
 因为匿名内部类要么继承类，要么实现接口，但是不能两者兼备。
 而且如果是实现接口，也只能实现一个接口。

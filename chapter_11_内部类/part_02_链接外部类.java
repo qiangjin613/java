@@ -2,9 +2,8 @@
 当生成一个内部类的对象时，
 此对象与制造它的外部对象（enclosing object）之间就有了一种联系，
 所以它能访问其外部对象的所有成员，而不需要任何特殊条件。
+此外，内部类还拥有其外围类的所有元素的访问权。
  */
-
-import com.sun.org.apache.bcel.internal.generic.Select;
 
 /**
  * 测试”外部类“权限的例子：
@@ -62,6 +61,24 @@ class Sequence {
         }
     }
 }
+class TestDemo {
+    public static void main(String[] args) {
+        Sequence sequence = new Sequence(10);
+        for (int i = 0; i < 10; i++) {
+            sequence.add(i + "");
+        }
+        /*
+        虽然 selector 的运行时类型是 private 的 Sequence.SequenceSelector 类，
+        但这并不妨碍在其他类中使用，因为_权限修饰符_只是在编译器进行限制
+         */
+        Selector selector = sequence.selector();
+        while (!selector.end()) {
+            System.out.print(selector.current() + " ");
+            selector.next();
+        }
+    }
+}
+
 
 /*
 Q: 内部类自动拥有对其外部类所有成员的访问权。这是如何做到的呢？

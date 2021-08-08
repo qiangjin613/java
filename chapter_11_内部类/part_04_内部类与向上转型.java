@@ -35,11 +35,16 @@ class Parcel4 {
 }
 class TestParcel {
     public static void main(String[] args) {
+        /* 但要直接使用内部类时：没有执行权限 */
+        // Parcel4.PContents pContents = p.new PContents();
+
+        // 只能通过内部类 + 向上转型来使用内部类：
         Parcel4 p = new Parcel4();
         Contents c = p.contents();
+        c.value();
+
         Destination d = p.destination("TT");
-        /* 没有执行权限 */
-        // Parcel4.PContents pContents = p.new PContents();
+        d.readLabel();
     }
 }
 
