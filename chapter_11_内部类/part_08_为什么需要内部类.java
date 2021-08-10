@@ -4,6 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
+至此，我们已经看到了许多描述内部类的语法和语义，
+但是这并不能同答“为什么需要内部类”这个问题。
+ *
+那么，Java 设计者们为什么会如此费心地增加这项基本的语言特性呢？
+一般说来，内部类继承自某个类或实现某个接口，
+内部类的代码操作创建它的外围类的对象。
+所以可以认为内部类提供了某种进入其外围类的窗口。
+ *
+内部类必须要回答的一个问题是：
+如果只是需要一个对接口的引用，为什么不通过外围类实现那个接口呢？
+答案是：“如果这能满足需求，那么就应该这样做。”
+ *
+那么内部类实现一个接口与外围类实现这个接口有什么区别呢？
+答案是：后者不是总能享用到接口带来的方便，有时需要用到接口的实现。
+所以，使用内部类最吸引人的原因是：
+每个内部类都能独立地继承自一个（接口的）实现，
+所以无论外围类是否已经继承了某个（接口的）实现，对于内部类都没有影响。
+ *
+如果没有内部类提供的、可以继承多个具体的或抽象的类的能力，
+一些设计与编程问题就很难解决。
+从这个角度看，内部类使得多重继承的解决方案变得完整。
+接口解决了部分问题，而内部类有效地实现了“多重继承”。
+也就是说，内部类允许继承多个非接口类型。
+ */
+
+/*
+为了看到更多的细节，让我们考虑这样一种情形：
 必须在一个类中以某种方式实现两个接口的例子：（内部类 -- 多继承）
 （由于接口的灵活性，你有两种选择；使用单一类，或者使用内部类）
  */
@@ -55,10 +82,11 @@ class MultiImplementation {
 }
 
 /*
+如果不需要解决“多重继承”的问题，那么自然可以用别的方式编码，而不需要使用内部类。
 如果使用内部类，还可以获得其他一些特性：
 1.内部类可以有多个实例，每个实例都有自己的状态信息，并且与其外部类对象的信息相互独立。
-2.在单个外部类中，可以让多个内部类以不同的方式实现同一个接口，或继承同一个类。
-3.创建内部类对象的时刻并不依赖于外部类对象的创建（是嵌套类不需要吧？）
+2.在单个外部类中，可以让多个内部类以不同的方式实现同一个接口，或继承同一个类。（迭代器、反向迭代器的例子）
+3.创建内部类对象的时刻并不依赖于外部类对象的创建
 4.内部类并没有令人迷惑的"is-a”关系，它就是一个独立的实体。
 
 比如【链接外部类中的 Sequence 类】
@@ -73,12 +101,12 @@ class MultiImplementation {
 /*
 【闭包与回调】
 闭包（closure）是一个可调用的对象，它记录了一些信息，这些信息来自于创建它的作用域。
-通过这个定义，
-可以看出内部类是面向对象的闭包，因为它不仅包含外部类对象（创建内部类的作用域）的信息，
+通过这个定义，可以看出内部类是面向对象的闭包，
+因为它不仅包含外部类对象（创建内部类的作用域）的信息，
 还自动拥有一个指向此外部类对象的引用。
 在此作用域内，内部类有权操作所有的成员，包括 private 成员。
 
-Java 最引人争议的问题之一就是：（因为闭包，所以要类似指针的机制，用于回调）
+Java 最引人争议的问题之一就是：
 人们认为 Java 应该包含某种类似指针的机制，以允许回调（callback）。
 通过回调，对象能够携带一些信息，这些信息允许它在稍后的某个时刻调用初始的对象。
 但是，如果回调是通过指针实现的，那么就只能寄希望于程序员不会误用该指针。
@@ -86,7 +114,7 @@ Java 更小心仔细，所以没有在语言中包括指针。
 通过内部类提供闭包的功能是优良的解决方案，它比指针更灵活、更安全。
 
 在 Java 8 之前，内部类是实现闭包的唯一方式。
-在 Java 8 中，我们可以使用 lambda 表达式来实现闭包行为，并且语法更加优雅和简洁
+在 Java 8 中，我们可以使用 lambda 表达式来实现闭包行为，并且语法更加优雅和简洁。
 
 
 简言之：lambda -> 内部类 -> 指针
@@ -132,6 +160,7 @@ class Callee2 extends MyIncrement {
         public void increment() {
             System.out.println("内部类的 increment() 方法， i= " + i);
             /* 调用外部类的方法 */
+            /* 通过 Callee2 的“钩子”（hook）获取 Callee2 的信息 */
             /* 指定类外方法，否则将得到无限递归 */
             Callee2.this.increment();
         }
@@ -198,6 +227,19 @@ class Callbacks {
 
 /*
 【内部类与控制框架】
+应用程序框架（application framework）就是被设计用以解决某类特定问题的一个类或一组类。
+ *
+要运用某个应用程序框架，通常是继承一个或多个类，并覆盖某些方法。
+在覆盖后的方法中，编写代码定制应用程序框架提供的通用解决方案，以解决你的特定问题。
+这是设计模式中模板方法的一个例子，
+模板方法包含算法的基本结构，并且会调用一个或多个可覆盖的方法，以完成算法的动作。
+ *
+设计模式总是将变化的事物与保持不变的事物分离开，
+在这个模式中，模板方法是保持不变的事物，而可覆盖的方法就是变化的事物。
+
+控制框架是一类特殊的应用程序框架，它用来解决响应事件的需求。
+主要用来响应事件的系统被称作事件驱动系统。
+应用程序设计中常见的问题之一是图形用户接口（GUI），它几乎完全是事件驱动的系统。
  */
 
 /**
@@ -206,12 +248,14 @@ class Callbacks {
 abstract class Event {
     private Instant eventTime;
     protected final Duration delayTime;
+
     public Event(long millisecondDelay) {
         /* 当希望运行 Event 并随后调用 start() 时，
         那么构造器就会捕获（从对象创建的时刻开始的）时间 */
         delayTime = Duration.ofMillis(millisecondDelay);
         start();
     }
+
     /* 方法是 public 的，允许重新启动 */
     public void start() {
         eventTime = Instant.now().plus(delayTime);
@@ -226,6 +270,7 @@ abstract class Event {
  */
 class Controller {
     private List<Event> eventList = new ArrayList<>();
+
     public void addEvent(Event c) {
         eventList.add(c);
     }
@@ -330,6 +375,8 @@ class GreenhouseControls extends Controller {
             return "Bing";
         }
     }
+
+    // 重新运行时间的内部类：
     public class Restart extends Event {
         private Event[] eventList;
         public Restart(long delayTime, Event[] eventList) {
@@ -355,6 +402,8 @@ class GreenhouseControls extends Controller {
             return "Restarting system";
         }
     }
+
+    // 结束程序的内部类：
     public static class Terminate extends Event {
         public Terminate(long delayTime) {
             super(delayTime);
