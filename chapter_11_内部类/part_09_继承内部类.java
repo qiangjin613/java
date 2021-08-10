@@ -36,7 +36,7 @@ class InheritInner extends WithInner.Inner {
     InheritInner(WithInner wi) {
         // 在这里要明确指定使用内部类的构造器。
         // 这里调用的是 WithInner.Inner 的 Inner(int i) 构造器。
-        // 猜想：super 是根据 extends 后面的类来走的，wi 是提供了一个
+        // 猜想：super 是根据 extends 后面的类来走的，wi 是提供了一个外部类 WithInner 的引用
         wi.super(1);
     }
 
