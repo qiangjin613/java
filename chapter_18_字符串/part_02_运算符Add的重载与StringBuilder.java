@@ -16,11 +16,18 @@ class Concatenation {
         System.out.println(s);
     }
 }
-/**
- * 【编译器的自动性能优化】
- * 上述代码中：编译器创建了一个 StringBuilder 对象，用于构建最终的 String，
- * 并对每个字符串调用了一次 append() 方法（共计 4 次），
- * 最后调用 toString() 生成结果，并存为 s。
+/*
+【编译器的自动性能优化】
+上述代码中：编译器创建了一个 StringBuilder 对象，用于构建最终的 String，
+并对每个字符串调用了一次 append() 方法，
+最后调用 toString() 生成结果，并存为 s。
+即：
+new StringBuilder()
+         .append("abc")
+         .append("mango")
+         .append("def")
+         .append("47")
+         .toString();
  */
 
 
@@ -58,11 +65,11 @@ class WitherStringBuilder {
 
 
 
-/**
- * Q：如何合理地利用编译器的自动优化？
- * A：如果字符串操作比较简单，那就可以信赖编译器，它会合理地构造最终的字符串结果。
- *    但是，如果要在循环中使用拼接字符传，而且可能有性能问题，
- *    那么最好显示创建一个 StringBuilder 对象，用它来构建最终结构。
+/*
+Q：如何合理地利用编译器的自动优化？
+A：如果字符串操作比较简单，那就可以信赖编译器，它会合理地构造最终的字符串结果。
+   但是，如果要在循环中使用拼接字符传，而且可能有性能问题，
+   那么最好显示创建一个 StringBuilder 对象，用它来构建最终结构。
  */
 
 
@@ -93,11 +100,10 @@ class UsingStringBuilder {
     public static String string2() {
         // [5] 使用了 Stream，这样代码更加简洁美观。
         // 可以证明，Collectors.joining() 内部也是使用的 StringBuilder，这种写法不会影响性能！
-        String result = new Random(47)
+        return new Random(47)
                 .ints(15, 0, 100)
                 .mapToObj(Integer::toString)
                 .collect(Collectors.joining(", "));
-        return result;
     }
 
     public static void main(String[] args) {

@@ -19,7 +19,6 @@ class InfiniteRecursion {
         */
         // return "InfiniteRecursion address: " + this + "\n";
 
-
         // 可以使用基类的 toString() 方法
         return "InfiniteRecursion address: " + super.toString() + "\n";
     }
