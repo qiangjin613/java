@@ -1,5 +1,4 @@
 import java.io.PrintStream;
-import java.text.Format;
 import java.util.Formatter;
 
 /**
@@ -102,7 +101,7 @@ class ReceiptBuilder {
 /**
  * 【Formatter 转换】
  *      %d  整型（十进制）
- *      %x  整形（十六进制）
+ *      %x  整形（十六进制） 或者 %X，二者区别：x -- 字母小写，X -- 字母大写
  *
  *      %f  浮点数（十进制）
  *      %e  浮点数（科学计数）
@@ -162,6 +161,32 @@ class DatabaseException extends Exception {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+}
+
+/*
+【一个十六进制转储（dump）工具】
+ */
+class Hex {
+    public static String format(byte[] data) {
+        StringBuilder result = new StringBuilder();
+        int n = 0;
+        for (byte b : data) {
+            if (n % 16 == 0) {
+                result.append(String.format("%05X: ", n));
+            }
+            result.append(String.format("%02X ", b));
+            n++;
+            if (n % 16 == 0) {
+                result.append("\n");
+            }
+        }
+        result.append("\n");
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(format("sskfjviefjiejkfoekcfj".getBytes()));
     }
 }
 
