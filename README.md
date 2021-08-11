@@ -89,6 +89,7 @@ final class Explore extends java.lang.Enum<Explore> {
   public static Explore valueOf(java.lang.String);
   static {};
 }
+
 > javap -p Explore.class
 Compiled from "values方法的神秘之处.java"
 final class Explore extends java.lang.Enum<Explore> {
@@ -100,6 +101,7 @@ final class Explore extends java.lang.Enum<Explore> {
   private Explore();
   static {};
 }
+
 > javap -c Explore.class
 Compiled from "values方法的神秘之处.java"
 final class Explore extends java.lang.Enum<Explore> {
