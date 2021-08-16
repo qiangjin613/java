@@ -1,7 +1,7 @@
 /*
 "instanceof 的形式（instanceof和isInstance()）
     V.S.
-与Class对象直接比较"
+与 Class 对象直接比较"
 存在重要区别！
  */
 class Base2 {}
@@ -15,20 +15,15 @@ class FamilyVsExactType {
         System.out.println(
                 "Base2.isInstance(x) " + Base2.class.isInstance(x));
         System.out.println(
-                "Derived2.isInstance(x) " +
-                        Derived2.class.isInstance(x));
+                "Derived2.isInstance(x) " + Derived2.class.isInstance(x));
         System.out.println(
-                "x.getClass() == Base2.class " +
-                        (x.getClass() == Base2.class));
+                "x.getClass() == Base2.class " + (x.getClass() == Base2.class));
         System.out.println(
-                "x.getClass() == Derived2.class " +
-                        (x.getClass() == Derived2.class));
+                "x.getClass() == Derived2.class " + (x.getClass() == Derived2.class));
         System.out.println(
-                "x.getClass().equals(Base2.class)) "+
-                        (x.getClass().equals(Base2.class)));
+                "x.getClass().equals(Base2.class)) "+ (x.getClass().equals(Base2.class)));
         System.out.println(
-                "x.getClass().equals(Derived2.class)) " +
-                        (x.getClass().equals(Derived2.class)));
+                "x.getClass().equals(Derived2.class)) " + (x.getClass().equals(Derived2.class)));
     }
 
     public static void main(String[] args) {
@@ -40,7 +35,7 @@ class FamilyVsExactType {
 
 /*
 测试 Class 对象的相等性：
-instanceof 的形式：产生的结果相同
+instanceof 的形式（instanceof和 isInstance）：产生的结果相同
 == 和 equals()：产生的结果也相同。
 
 但 instanceof 判断有没有派生关系，

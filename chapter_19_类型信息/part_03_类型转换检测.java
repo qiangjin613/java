@@ -1,10 +1,28 @@
-/**
- * instanceof 的使用
+/*
+【类型转换检测：instanceof】
+直到现在，我们已知的 RTTI 类型包括：
+    1.传统的类型转换
+    如 “(Shape)”，由 RTTI 确保转换的正确性，如果执行了一个错误的类型转换，
+    就会抛出一个 ClassCastException 异常。
+    2.代表对象类型的 Class 对象
+    通过查询 Class 对象可以获取运行时所需的信息.
+
+RTTI 在 Java 中还有第三种形式，那就是关键字 instanceof。
+    if (x instanceof Dog)
+        Dog d = (Dog) x;
+instanceof 有一个严格的限制：只可以将它与命名类型进行比较，而不能与 Class 对象作比较。
+
+【一个动态 instanceof 函数】
+classObj.isInstance() 方法提供了一种动态测试对象类型的方法。
+因此，所有这些繁琐的 instanceof 语句都可以使用 Class.isInstance() 进行替换。
+classObj.isInstance(Obj)
+native boolean isInstance(Object obj)
+
+【还有一个 instanceof 方法】
+classObj.isAssignableFrom(otherClassObj)
+native boolean isAssignableFrom(Class<?> cls)
  */
 
-import javafx.util.Pair;
-
-import java.nio.channels.ClosedSelectorException;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -155,6 +173,7 @@ class ForNameCreator extends PetCreator {
         return types;
     }
 }
+
 /**
  * 关键字 instanceof 的使用：对 Pet 的实际对象进行计数
  */
@@ -239,7 +258,7 @@ class LiteralPetCreator extends PetCreator {
     }
 }
 /**
- * 创建一个使用 LiteralPetCreator 的外观模式，用于创建多个 Pet 对象
+ * 创建一个使用 LiteralPetCreator 的外观模式，用于创建多个 Pet 对象，比较时依旧使用 instanceof
  */
 class Pets {
     public static final PetCreator CREATOR = new LiteralPetCreator();
@@ -375,3 +394,10 @@ class PetCount4 {
         System.out.println("\nn" + counter);
     }
 }
+/*
+A.isAssignableFrom(B)
+确定一个类(B)是不是继承来自于另一个父类(A)，一个接口(A)是不是实现了另外一个接口(B)，或者两个类相同。
+主要，这里比较的维度不是实例对象，而是类本身，因为这个方法本身就是Class类的方法，判断的肯定是和类信息相关的。
+
+也就是说，A 是 B 的基类、父接口时返回 true，否则返回 false。
+ */
