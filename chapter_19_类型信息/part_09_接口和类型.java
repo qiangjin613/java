@@ -6,11 +6,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /*
-接口的耦合
+【接口和类型】
+interface 关键字的一个重要目标就是允许程序员隔离组件，进而降低耦合度。
+使用接口可以实现这一目标，但是通过类型信息，
+这种耦合性还是会传播出去——接口并不是对解耦的一种无懈可击的保障。
+ */
+
+/*
+以下例子，通过接口从实际类型顺腾摸瓜找到实际类型：
  */
 class B implements A {
     @Override
     public void f() {}
+
     public void g() {}
 }
 class InterfaceViolation {
@@ -33,16 +41,18 @@ class InterfaceViolation {
 
 这样的操作完全是合情合理的，但是你也许并不想让客户端开发者这么做，
 因为这给了他们一个机会，使得他们的代码与你的代码的耦合度超过了你的预期。
+
+一种解决方案是直接声明，如果开发者决定使用实际的类而不是接口，
+他们需要自己对自己负责。这在很多情况下都是可行的，
+但“可能”还不够，你或许希望能有一些更严格的控制方式。
+
+最简单的方式是让实现类只具有包访问权限，
+这样在包外部的客户端就看不到它了：
  */
 
-/*
-对于接口耦合度的解决方案，一种是直接声明。
-一种是用一种更严格的控制方式：让实现类只具有包访问权限，
-这样在包外部的客户端就看不到它了。
-如：使用 “package 接口和类型” 中的 “HiddenC” 类
-
-如果你试着将其向下转型为 C，则将被禁止，因为在包的外部没有任何 C 类型可用
-如下：
+/**
+ * 如：使用 “package 接口和类型” 中的 “HiddenC” 类
+ * （如果你试着将其向下转型为 C，则将被禁止，因为在包的外部没有任何 C 类型可用）
  */
 class HiddenImplementation {
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -80,6 +90,7 @@ class HiddenImplementation {
 使用 "javap -private 类名" 命令，可以看到这个受保护类的所有方法，包括 private 方法！
 
 【因此，任何人都可以获取你最私有的方法的名字和签名，然后调用它们】
+(在 class 下，所有的访问权限控制，就像一张白纸)
  */
 
 /*
@@ -115,13 +126,13 @@ class InnerA {
 class InnerImplementation {
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         A a = InnerA.makeA();
-        a.f();
-        System.out.println(a.getClass().getName()); // out: InnerA$C
-        // 调用私有内部内的全部方法：
-        HiddenImplementation.callHiddenMethod(a, "g");
-        HiddenImplementation.callHiddenMethod(a, "u");
-        HiddenImplementation.callHiddenMethod(a, "v");
-        HiddenImplementation.callHiddenMethod(a, "w");
+        Class<?> classA = a.getClass();
+        System.out.println(classA.getName());
+        /* 获取 A 的运行时类型的所有方法（包括私有方法），并运行 */
+        for (Method method : classA.getDeclaredMethods()) {
+            method.setAccessible(true);
+            method.invoke(a);
+        }
     }
 }
 
@@ -157,10 +168,10 @@ class AnonymousImplementation {
         a.f();
         System.out.println(a.getClass().getName()); // out: AnonymousA$1
         // 调用匿名内部类的全部方法：
-        HiddenImplementation.callHiddenMethod(a, "g");
-        HiddenImplementation.callHiddenMethod(a, "u");
-        HiddenImplementation.callHiddenMethod(a, "v");
-        HiddenImplementation.callHiddenMethod(a, "w");
+        for (Method method : a.getClass().getDeclaredMethods()) {
+            method.setAccessible(true);
+            method.invoke(a);
+        }
     }
 }
 
@@ -169,9 +180,9 @@ class AnonymousImplementation {
  */
 class WithPrivateFinalField {
     private int i = 47;
-    private final int i2 = 477;
-    private final String s = "一个 private final 的 s";
-    private String s2 = "一个 private 的 s";
+    private final int i2 = 47;
+    private final String s = "private final s";
+    private String s2 = "private s";
 
     @Override
     public String toString() {
@@ -187,30 +198,39 @@ class ModifyingPrivateFields {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
         WithPrivateFinalField pf = new WithPrivateFinalField();
         System.out.println(pf);
+        // out: WithPrivateFinalField{i=47, i2=47, s='private final s', s2='private s'}
+
 
         // 获取并修改私有字段：
         Field fI = pf.getClass().getDeclaredField("i");
         fI.setAccessible(true);
-        System.out.println("f.getInt(pf) = " + fI.getInt(pf));
         fI.setInt(pf, 111);
+        System.out.println("f.getInt(pf) = " + fI.getInt(pf));
+        // out: f.getInt(pf) = 111
+
 
         Field fI2 = pf.getClass().getDeclaredField("i2");
         fI2.setAccessible(true);
-        System.out.println("fI2.getInt(pf) = " + fI2.getInt(pf));
         fI2.setInt(pf, 111);
+        System.out.println("fI2.getInt(pf) = " + fI2.getInt(pf));
+        // out: fI2.getInt(pf) = 111
 
         Field fS = pf.getClass().getDeclaredField("s");
         fS.setAccessible(true);
+        fS.set(pf, "banana");
         System.out.println("fS.get(pf) = " + fS.get(pf));
-        fS.set(pf, "private final 的 s 已经被我修改过了！哈哈哈哈");
+        // out: fS.get(pf) = banana
 
         Field fS2 = pf.getClass().getDeclaredField("s2");
         fS2.setAccessible(true);
+        fS2.set(pf, "banana");
         System.out.println("fS2.get(pf) = " + fS2.get(pf));
-        fS2.set(pf, "private 的 s 已经被我修改过了！哈哈哈哈");
+        // out: fS2.get(pf) = banana
 
         // 再次查看被修改的字段的值：
         System.out.println(pf);
+        // out: WithPrivateFinalField{i=111, i2=47, s='private final s', s2='banana'}
+
     }
 }
 /*
@@ -218,19 +238,17 @@ class ModifyingPrivateFields {
 看起来任何方式都没法阻止反射调用那些非公共访问权限的方法（包括在私有内部类、匿名内部类里面的）。
 对于字段来说也是这样，即便是 private 字段。
 
-有一个特殊的点，对于 final 字段：
+有趣的地方，对于 final 字段：
 在修改时，final 字段是安全的，运行时系统会在不抛出异常的情况下接受任何修改的尝试，
 但是实际上不会发生任何修改。（就是可以编写修改的代码，但这对于 final 字段来说，没有什么效果！）
  */
 
-/**
- * 【总结】
- * 通常，所有这些违反访问权限的操作并不是什么十恶不赦的。
- * 首先说明，不应该去调用这些标志为 private 或包访问权限的方法。
- * 如果有人使用反射调用了这写越权的方法，那么对他们（客户端程序员）来说，
- * 如果你修改了这些方法的某些地方，他们不应该抱怨（因为这些本来就不是属于他们去使用的）。
- * 另一方面，总在类中留下后门，也许会帮助你解决某些特定类型的问题（这些问题往往除此之外，别无它法）。
- * 总之，不可否认，反射给我们带来了很多好处。
+/*
+【总结】
+通常，所有这些违反访问权限的操作并不是什么十恶不赦的。
+首先说明，不应该去调用这些标志为 private 或包访问权限的方法。
+如果有人使用反射调用了这写越权的方法，那么对他们（客户端程序员）来说，
+如果你修改了这些方法的某些地方，他们不应该抱怨（因为这些本来就不是属于他们去使用的）。
+另一方面，总在类中留下后门，也许会帮助你解决某些特定类型的问题（这些问题往往除此之外，别无它法）。
+总之，不可否认，反射给我们带来了很多好处。
  */
-
-
