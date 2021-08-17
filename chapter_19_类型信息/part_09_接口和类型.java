@@ -194,6 +194,10 @@ class WithPrivateFinalField {
                 '}';
     }
 }
+
+/**
+ * 下面有一个很有意思的地方：对于修改 final 数据而言...
+ */
 class ModifyingPrivateFields {
     public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
         WithPrivateFinalField pf = new WithPrivateFinalField();
