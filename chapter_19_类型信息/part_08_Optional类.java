@@ -6,8 +6,26 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /*
-使用 Optional 为 null 提供轻量级代理，
-以防止抛出 NullPointerException。
+【Optional 类】
+---背景---
+如果你使用内置的 null 来表示没有对象，
+每次使用引用的时候就必须测试一下引用是否为 null，这显得有点枯燥，
+而且势必会产生相当乏味的代码。
+（问题在于 null 没什么自己的行为，只会在你想用它执行任何操作的时候产生 NullPointException）
+
+---作用---
+java.util.Optional 为 null 值提供了一个轻量级代理，
+可以防止你的代码直接抛出 NullPointException。
+
+实际上，在所有地方都使用 Optional 是没有意义的，
+有时候检查一下是不是 null 也挺好的，或者有时我们可以合理地假设不会出现 null，
+甚至有时候检查 NullPointException 异常也是可以接受的。
+Optional 最有用武之地的是在那些“更接近数据”的地方，在问题空间中代表实体的对象上。
+ */
+
+
+/**
+ * 一个例子：
  */
 class Person2 {
     public final Optional<String> first;
@@ -49,6 +67,10 @@ class Person2 {
     }
 }
 
+
+/**
+ * 另一个例子：
+ */
 class EmptyTitleException extends RuntimeException {}
 class Position {
     private String title;
@@ -259,12 +281,12 @@ class SnowRemovalRobot implements Robot {
 （在本例中，即提供 Null 对象所代表 Robot 的确切类型信息）
 （这些信息是通过动态代理捕获的）
  */
-class NullRobotHandler implements InvocationHandler {
+class NullRobotProxyHandler implements InvocationHandler {
 
     private String nullName;
     private Robot proxied = new NRobot();
 
-    NullRobotHandler(Class<? extends Robot> type) {
+    NullRobotProxyHandler(Class<? extends Robot> type) {
         nullName = type.getSimpleName() + " NullRobot";
     }
 
@@ -295,13 +317,13 @@ class NullRobot {
     public static Robot newNullRobot(Class<? extends Robot> type) {
         return (Robot) Proxy.newProxyInstance(
                 NullRobot.class.getClassLoader(),
-                new Class[] {Null.class, Robot.class},
-                new NullRobotHandler(type));
+                new Class[] { Null.class, Robot.class },
+                new NullRobotProxyHandler(type));
     }
 
     public static void main(String[] args) {
         Stream.of(
-                new SnowRemovalRobot("机器人2号"),
+                new SnowRemovalRobot("SnowBee"),
                 newNullRobot(SnowRemovalRobot.class)
         ).forEach(Robot::test);
     }

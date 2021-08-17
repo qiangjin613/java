@@ -2,6 +2,16 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+/*
+【代理】
+代理是基本的设计模式之一。
+一个对象封装真实对象，
+代替其提供其他或不同的操作---这些操作通常涉及到与“真实”对象的通信，因此代理通常充当中间对象。
+ */
+
+/**
+ * 这是一个简单的示例，显示代理的结构：
+ */
 interface Interface {
     void doSomething();
     void somethingElse(String arg);
@@ -18,10 +28,6 @@ class RealObject implements Interface {
         System.out.println("RealObject somethingElse " + arg);
     }
 }
-
-/**
- * 一个简单的代理
- */
 class SimpleProxy implements Interface {
     private Interface proxied;
 
@@ -56,12 +62,18 @@ class SimpleProxyDemo {
 }
 
 
+
+
+/*
+Java 的动态代理更进一步，
+不仅动态创建代理对象而且动态处理对代理方法的调用。
+
+在动态代理上进行的所有调用都被重定向到单个调用处理程序，
+该处理程序负责发现调用的内容并决定如何处理。
+ */
+
 /**
- * Java 的动态代理：
- * 不仅动态创建代理对象而且动态处理对代理方法的调用。
- *
- * 在动态代理上进行的所有调用都被重定向到单个调用处理程序，
- * 该处理程序负责发现调用的内容并决定如何处理。
+ * SimpleProxy 使用动态代理重写的例子：
  */
 class DynamicProxyHandler implements InvocationHandler {
     private Object proxied;
@@ -92,7 +104,14 @@ class SimpleDynamicProxy {
 
     public static void main(String[] args) {
         RealObject real = new RealObject();
-        consumer(real);
+
+        DynamicProxyHandler handler = new DynamicProxyHandler(real);
+        try {
+            handler.invoke(real, Interface.class.getMethods()[0], new Object[]{""});
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
         // 插入代理并再次调用:
         Interface proxy = (Interface) Proxy.newProxyInstance(
                 Interface.class.getClassLoader(),
@@ -102,8 +121,10 @@ class SimpleDynamicProxy {
     }
 }
 
+
 /**
- * 通过代理过滤某些方法的调用，同时传递其他方法调用
+ * 在 DynamicProxyHandler 中，可过选择性地过滤掉一些方法的调用。
+ * 改造如下：
  */
 class MethodSelector implements InvocationHandler {
     private Object proxied;
