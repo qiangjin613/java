@@ -400,42 +400,130 @@ class FilledList<T> extends ArrayList<T> {
     }
 
     public static void main(String[] args) {
-        List<String> list = new FilledList<>("Hello", 4);
-        System.out.println(list);
-        /*
-        [Hello, Hello, Hello, Hello]
-         */
-
         List<Integer> ilist = new FilledList<>(() -> 47, 4);
         System.out.println(ilist);
         /*
         [47, 47, 47, 47]
          */
+
+        List<String> list = new FilledList<>("Hello", 4);
+        System.out.println(list);
+        /*
+        [Hello, Hello, Hello, Hello]
+         */
     }
 }
 /*
+即使编译器无法得知 add() 中的 T 的任何信息，但它仍可以在编译期确保你放入 FilledList 中的对象是 T 类型。
+因此，即使擦除移除了方法或类中的实际类型的信息，编译器仍可以确保方法或类中使用的类型的内部一致性。
 
+因为擦除移除了方法体中的类型信息，所以在运行时的问题就是边界：即对象进入和离开方法的地点。
+这些正是编译器在编译期执行类型检查并插入转型代码的地点。
  */
 
+/**
+ * 考虑下面非泛型的示例：
+ */
+class SimpleHolder {
+    private Object obj;
 
+    public void set(Object obj) {
+        this.obj = obj;
+    }
 
+    public Object get() {
+        return obj;
+    }
 
+    public static void main(String[] args) {
+        SimpleHolder holder = new SimpleHolder();
+        holder.set("Item");
+        String s = (String) holder.get();
+    }
+}
+/*
+如果用 javap -c SimpleHolder 反编译这个类，会得到如下内容（经过编辑）：
+public void set(java.lang.Object);
+   0: aload_0
+   1: aload_1
+   2: putfield #2; // Field obj:Object;
+   5: return
 
+public java.lang.Object get();
+   0: aload_0
+   1: getfield #2; // Field obj:Object;
+   4: areturn
 
+public static void main(java.lang.String[]);
+   0: new #3; // class SimpleHolder
+   3: dup
+   4: invokespecial #4; // Method "<init>":()V
+   7: astore_1
+   8: aload_1
+   9: ldc #5; // String Item
+   11: invokevirtual #6; // Method set:(Object;)V
+   14: aload_1
+   15: invokevirtual #7; // Method get:()Object;
+   18: checkcast #8; // class java/lang/String
+   21: astore_2
+   22: return
 
+看到，set() 和 get() 方法存储和产生值，转型在调用 get() 时接受检查。
+ */
 
+/**
+ * 现将泛型融入上例代码中：
+ */
+class GenericHolder2<T> {
+    private T obj;
 
+    public void set(T obj) {
+        this.obj = obj;
+    }
 
+    public T get() {
+        return obj;
+    }
 
+    public static void main(String[] args) {
+        GenericHolder2<String> holder = new GenericHolder2<>();
+        holder.set("Item");
+        String s = holder.get();
+    }
+}
+/*
+继续用 javap -c SimpleHolder 反编译这个类，得到如下内容（经过编辑）：
+public void set(java.lang.Object);
+   0: aload_0
+   1: aload_1
+   2: putfield #2; // Field obj:Object;
+   5: return
 
+public java.lang.Object get();
+   0: aload_0
+   1: getfield #2; // Field obj:Object;
+   4: areturn
 
+public static void main(java.lang.String[]);
+   0: new #3; // class GenericHolder2
+   3: dup
+   4: invokespecial #4; // Method "<init>":()V
+   7: astore_1
+   8: aload_1
+   9: ldc #5; // String Item
+   11: invokevirtual #6; // Method set:(Object;)V
+   14: aload_1
+   15: invokevirtual #7; // Method get:()Object;
+   18: checkcast #8; // class java/lang/String
+   21: astore_2
+   22: return
 
+所产生的字节码是相同的。
+对进入 set() 的类型进行检查是不需要的，因为这将由编译器执行。
+而对 get() 返回的值进行转型仍然是需要的，只不过不需要你来操作，
+它由编译器自动插入，这样你就不用编写（阅读）杂乱的代码。
 
-
-
-
-
-
-
-
-
+SimpleHolder 和 GenericHolder2 中的 get()、set() 产生了相同的字节码，
+** 这就告诉我们泛型的所有动作（对入参的编译器检查和对返回值的转型）都发生在边界处。
+** 这有助于澄清对擦除的困惑，记住：“边界就是动作发生的地方”。
+ */
