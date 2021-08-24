@@ -136,15 +136,66 @@ class BasicBounds {
     }
 }
 
+/*
+---------------------分界线---------------------------
+相同的知识点，不过下面使用了继承，优化了上面冗余的代码
+ */
 
+class HoldItem<T> {
+    T item;
 
+    HoldItem(T item) {
+        this.item = item;
+    }
 
+    T getItem() {
+        return item;
+    }
+}
 
+class WithColor2<T extends HasColor> extends HoldItem<T> {
+    WithColor2(T item) {
+        super(item);
+    }
 
+    java.awt.Color color() {
+        return item.getColor();
+    }
+}
 
+class WithColorCoord2<T extends Coord & HasColor> extends WithColor2<T> {
+    WithColorCoord2(T item) {
+        super(item);
+    }
 
+    int getX() {
+        return item.x;
+    }
 
+    int getY() {
+        return item.y;
+    }
 
+    int getZ() {
+        return item.z;
+    }
+}
 
+class Solid2<T extends Coord & HasColor & Weight> extends WithColorCoord2<T> {
+    Solid2(T item) {
+        super(item);
+    }
 
+    int weight() {
+        return item.weight();
+    }
+}
 
+class InheritBounds {
+    public static void main(String[] args) {
+        Solid2<Bounded> solid = new Solid2<>(new Bounded());
+        solid.color();
+        solid.getX();
+        solid.weight();
+    }
+}

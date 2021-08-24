@@ -95,22 +95,22 @@ Java 语言团队仍然欣然接受并进行了改进。
 /*
 如果想要将 Apple 和 Orange 放到一起，向上转型也使用于泛型：
  */
-class Fruit {
+class Fruit2 {
     private static long counter;
     private final long id = counter++;
     public long id() {
         return id;
     }
 }
-class Apple2 extends Fruit {}
-class Orange2 extends Fruit {}
+class Apple2 extends Fruit2 {}
+class Orange2 extends Fruit2 {}
 
 class GenericsAndUpcasting {
     public static void main(String[] args) {
-        ArrayList<Fruit> fruits = new ArrayList<>();
+        ArrayList<Fruit2> fruits = new ArrayList<>();
         fruits.add(new Apple2());
         fruits.add(new Orange2());
-        for (Fruit fruit : fruits) {
+        for (Fruit2 fruit : fruits) {
             /* 这并不会有什么问题 */
             System.out.println(fruit.id());
         }
