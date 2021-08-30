@@ -8,7 +8,7 @@ import java.util.List;
 /*
 【目录】
 Files 工具类包含大部分我们需要的目录操作和文件操作方法。
-出于某种原因，它们没有包含删除目录树相关的方法，因此我们将实现并将其添加到 onjava 库中。
+出于某种原因，它们没有包含删除目录树相关的方法，因此在下面实现该方法。
  */
 
 /**
@@ -54,7 +54,7 @@ Visitor 设计模式提供了一种标准机制来访问集合中的每个对象
  */
 class Directories {
     static Path test = Paths.get("test");
-    static String sep = FileSystems.getDefault().getSeparator();
+    static String sep = FileSystems.getDefault().getSeparator(); /* 获取当前操作系统的路径分隔符 */
     static List<String> parts = Arrays.asList("foo", "bar", "baz", "bag");
 
     static Path makeVariant() {
@@ -62,7 +62,7 @@ class Directories {
         return Paths.get("test", String.join(sep, parts));
     }
 
-    //
+    // refreshTestDir() 用于检测 test 目录是否已经存在。若存在，则使用我们新工具类 rmdir() 删除其整个目录：
     static void refreshTestDir() throws IOException {
         if (Files.exists(test))
             RmDir.rmdir(test);
@@ -72,10 +72,15 @@ class Directories {
 
     public static void main(String[] args) throws IOException {
         refreshTestDir();
-        Files.createFile(test.resolve("Hello.txt"));
+        Path path = test.resolve("Hello.txt"); /* resolve() 将文件名添加到 test Path 的末尾 */
+        Files.createFile(path); /* createFile() 使用参数 Path 创建一个空文件 */
         Path variant = makeVariant();
         try {
             Files.createDirectory(variant);
+            /* 注释：
+            1）使用 createDirectory() 来创建多级路径，但是这样会抛出异常，因为这个方法只能创建单级路径
+            2）对于已经存在的目录调用 createDirectory() 将会抛出异常
+            */
         } catch (Exception e) {
             System.out.println(e);
             System.out.println("Nope, that doesn't work.");
@@ -83,6 +88,8 @@ class Directories {
         populateTestDir();
         Path tempdir = Files.createTempDirectory(test, "DIR_");
         Files.createTempFile(tempdir, "pre", ".non");
+
+        // 使用 2 种方式遍历某个路径：
         Files.newDirectoryStream(test).forEach(System.out::println);
         System.out.println("*************");
         Files.walk(test).forEach(System.out::println);
@@ -92,29 +99,16 @@ class Directories {
         for (int i = 0; i < parts.size(); i++) {
             Path variant = makeVariant();
             if (!Files.exists(variant)) {
-                Files.createDirectory(variant);
+                Files.createDirectories(variant); /* 使用 createDirectories() 创建完整的目录路径 */
                 Files.copy(Paths.get("chapter_17_文件\\part_02_目录.java"), variant.resolve("File.txt"));
-                Files.createTempFile(variant, null, null);
+                Files.createTempFile(variant, null, null); /* 使用 createTempFile() 生成一个临时文件，如果未指定后缀，它将默认使用".tmp"作为后缀 */
             }
         }
     }
 }
 /*
-refreshTestDir() 用于检测 test 目录是否已经存在。若存在，则使用我们新工具类 rmdir() 删除其整个目录。
-
-检查是否 exists 是多余的，但我想说明一点，因为如果你对于已经存在的目录调用 createDirectory() 将会抛出异常。
-createFile() 使用参数 Path 创建一个空文件; resolve() 将文件名添加到 test Path 的末尾。
+【newDirectoryStream() VS walk()】
+为了展示结果，我们首次使用看起来很有希望的 newDirectoryStream()，
+但事实证明这个方法只是返回 test 目录内容的 Stream 流，并没有更多的内容。
+要获取目录树的全部内容的流，请使用 Files.walk()。
  */
-
-
-
-
-
-
-
-
-
-
-
-
-
