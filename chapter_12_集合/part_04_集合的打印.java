@@ -26,7 +26,17 @@ class PrintingCollections {
         System.out.println(fill(new ArrayList<>()));
         System.out.println(fill(new LinkedList<>()));
         System.out.println(fill(new HashSet<>()));
+        /* Output:
+        [rat, cat, dog, dog]
+        [rat, cat, dog, dog]
+        [rat, cat, dog]
+         */
 
         System.out.println(Arrays.toString(new Integer[] {1, 2, 3, 4}));
+        System.out.println(new Integer[] {1, 2, 3, 4});
+        /* Output:
+        [1, 2, 3, 4]
+        [Ljava.lang.Integer;@4554617c
+         */
     }
 }

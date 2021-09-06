@@ -1,5 +1,3 @@
-import java.util.*;
-
 /*
 在任何集合中，都必须有某种方式可以插入元素并再次获取它们。
 毕竟，保存事物是集合最基本的工作。
@@ -31,6 +29,9 @@ import java.util.*;
 3. hasNext() 方法检查序列中是否还有元素
 4. remove() 方法将迭代器最近返回的那个元素删除
  */
+
+import java.util.*;
+
 class SimpleIteration {
     public static void main(String[] args) {
         List<Pet> pets = Pets.list(12);

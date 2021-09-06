@@ -1,14 +1,14 @@
-import java.util.*;
-
 /*
 在 java.util 包中的 Arrays 和 Collections 类中都有很多实用的方法，
 可以在一个 Collection 中添加一组元素。
 
 1. Arrays.asList()
 2. Collections.addAll()，更快（首选）
-3. 集合.addAll()，只能接受另一个 Collection 作为参数，
-    没有其他两个灵活
+3. 集合.addAll()，只能接受另一个 Collection 作为参数，没有其他两个灵活
  */
+
+import java.util.*;
+
 class AddingGroups {
     public static void main(String[] args) {
         // Collection 的构造器可以接受另一个 Collection，用它来将自身初始化
@@ -17,16 +17,26 @@ class AddingGroups {
         );
 
         Integer[] moreInts = {5, 6, 7, 8};
-        // Collection.addAll() 方法只能接受另一个 Collection 作为参数，没有
+        // Collection.addAll() 方法只能接受另一个 Collection 作为参数
         collection.addAll(Arrays.asList(moreInts));
 
         Collections.addAll(collection, 11, 212, 13);
         Collections.addAll(collection, moreInts);
 
+        /*
+        因为该集合的底层是数组，所以在使用时会发生潜在的下标越界。
+        产生数组越绝异常：java.lang.ArrayIndexOutOfBoundsException
+        */
         List<Integer> list = Arrays.asList(189, 20);
         list.set(1, 88);
-        /* 因为该集合的底层是数组，所以在使用时会发生潜在的下标越界 */
         list.set(100, 99);
+
+        List<Integer> list2 = new ArrayList<>();
+        list2.add(2);
+        list2.set(29, 44);
+        /**
+         * 可见，与集合的来源是不是数组无关。
+         */
     }
 }
 

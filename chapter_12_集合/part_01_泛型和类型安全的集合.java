@@ -13,7 +13,7 @@
 
 使用固定长度、确定类型的数组已经无法满足这个需求了，
 java.util 库提供了一套相当完整的集合类（collection classes）来解决这个问题，
-这些类型也被称作容器类（container classes），
+这些类型也被称作 **容器类（container classes）** ，
 集合提供了完善的方法来保存对象，可以使用这些工具来解决大量的问题。
 
 集合还有一些其它特性，比如：
@@ -87,7 +87,7 @@ class ApplesAndOrangesWithGenerics {
 程序员发现所有类型信息都可以从左侧获得，
 因此，编译器没有理由强迫右侧再重复这些。
 
-虽然类型推断（type inference）只是个很小的请求，
+虽然 **类型推断（type inference）** 只是个很小的请求，
 Java 语言团队仍然欣然接受并进行了改进。
  */
 
