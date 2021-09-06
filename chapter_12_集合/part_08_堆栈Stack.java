@@ -1,6 +1,3 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 /*
 堆栈是“后进先出”（LIFO）集合。
 它有时被称为叠加栈（pushdown stack），因为最后“压入”（push）栈的元素，第一个被“弹出”（pop）栈。
@@ -8,6 +5,10 @@ import java.util.Deque;
 Java 1.0 中附带了一个 Stack 类，结果设计得很糟糕。
 Java 6 添加了 ArrayDeque ，其中包含直接实现堆栈功能的方法：
  */
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 class StackTest {
     public static void main(String[] args) {
         Deque<String> stack = new ArrayDeque<>(16);
