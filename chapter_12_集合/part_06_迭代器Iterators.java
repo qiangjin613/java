@@ -55,6 +55,7 @@ class SimpleIteration {
             it.remove();
             /*
              在调用 remove() 之前必须先调用 next()
+             否则会抛出 java.lang.IllegalStateException 异常
              */
             // it.remove();
         }
