@@ -1,7 +1,7 @@
 package basic.create;
 
-/*
-误区一：关于 Thread 的 run()
+/**
+ * 误区一：关于 Thread 的 run()
  */
 class Demo1 extends Thread {
     @Override
@@ -33,8 +33,8 @@ Notice：
 3. 永远不要调用线程对象的 run()。
  */
 
-/*
-误区二：妄图将线程“复活”
+/**
+ * 误区二：妄图将线程“复活”
  */
 class Demo2 extends Thread {
     @Override
