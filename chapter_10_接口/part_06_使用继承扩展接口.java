@@ -97,6 +97,9 @@ class C2 implements I1, I2{
     }
 }
 
+/*
+因为已经在 C 中有了 f() 的具体实现，所以在 C3 中无需强制重写 f() 方法
+ */
 class C3 extends C implements I2 {
     @Override
     public int f(int i) {
@@ -117,7 +120,7 @@ class C4 extends C implements I3 {
  */
 //class C5 extends C implements I1 {}
 //class C6 extends C implements I1, I3 {}
-
+//class C7 implements I1, I3 {}
 
 /*
 覆写、实现和重载令人不快地搅和在一起带来了困难。
