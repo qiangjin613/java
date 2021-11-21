@@ -1,7 +1,7 @@
 package basic.synchronize;
 
 /*
-线程安全的解决方案（三）：同步锁
+线程安全的解决方案（三）：同步锁（Lock）
  */
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,6 +31,7 @@ class X {
  * 对账户类的再次改造
  */
 class Account4 {
+    // 创造锁对象
     private final ReentrantLock lock = new ReentrantLock();
     private Integer id;
     private Double balance;
@@ -41,6 +42,7 @@ class Account4 {
     }
 
     public void draw(double drawAmount) {
+        /* 加锁 */
         lock.lock();
         try {
             // 取款成功
@@ -58,6 +60,7 @@ class Account4 {
                 System.out.println(Thread.currentThread().getName() + "取款失败，账户余额不足！");
             }
         } finally {
+            /* finally 中释放锁 */
             lock.unlock();
         }
     }
