@@ -143,6 +143,3 @@ class DepositThread extends Thread {
         }
     }
 }
-
-
-
