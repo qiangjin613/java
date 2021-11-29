@@ -80,24 +80,6 @@ class Account4 {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Account)) return false;
-
-        Account account = (Account) o;
-
-        if (getId() != null ? !getId().equals(account.getId()) : account.getId() != null) return false;
-        return getBalance() != null ? getBalance().equals(account.getBalance()) : account.getBalance() == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getBalance() != null ? getBalance().hashCode() : 0);
-        return result;
-    }
 }
 
 /**
