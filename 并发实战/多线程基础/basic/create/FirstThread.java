@@ -10,6 +10,10 @@ public class FirstThread extends Thread {
     public void run() {
         for (; i < 100; i++) {
             System.out.println(getName() + " " + i); /* 等价于 this.getName() */
+            /* 运行过程中修改线程名 */
+            if (i == 30) {
+                setName("小兵");
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 - join
 - sleep
 - yield
+- interrupt
 - 后台线程
 - 线程优先级
 
