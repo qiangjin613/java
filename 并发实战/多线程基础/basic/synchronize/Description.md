@@ -54,3 +54,102 @@ Java 5 开始，Java 提供了一种功能更强大的线程同步机制，可�
 #### Java 中锁的介绍
 1. Java 5 提供了 Lock、ReadWriteLock 两个根接口，并为 Lock 提供了 ReentrantLock（可重入锁）实现类，为 ReadWriteLock 提供了 ReentrantReadWriteLock（可重入读写锁）实现类。
 2. Java 8 提供了新的 StampedLock 类，在大多数场景中，可以代替传统的 ReentrantReadWriteLock。
+
+
+
+
+--- 待合并的总结
+### synchronized 关键字
+同步的本质就是给指定对象加锁，加锁后才能继续执行后续代码。
+
+说明：
+- 使用 synchronized 的时候，获取到的是哪个锁非常重要。锁对象如果不对，代码逻辑就不对；
+- 在使用 synchronized 的时候，不必担心抛出异常。因为无论是否有异常，都会在synchronized结束处正确释放锁
+
+#### 不需要同步的操作
+JVM规范定义了几种原子操作：
+- 基本类型（long和double除外）赋值，例如：int n = m；
+- 引用类型赋值，例如：List<String> list = anotherList。
+
+说明：
+- 单条原子操作的语句是不需要同步的，比如：`this.i = i;`。但是，如果是多赋值，就不许要博正同步操作，如：`this.i = i; this.j = j;`
+- long 和 double 是 64 位数据，JVM 没有明确规定 64 位赋值操作是不是一个原子操作，不过在 x64 平台的 JVM 是把 long 和 double 的赋值作为原子操作实现的。
+
+有时，通过一些巧妙的转换，可以把非原子操作变为原子操作。例如赋值多个变量的情况：
+```java
+class Pair {
+    int[] pair;
+    public void set(int i, int j) {
+        int[] temp = new int[] { i, j };
+        pair = temo;
+    }
+}
+```
+其中 set() 就不需要同步，因为 `pair = temo;` 是引用赋值的原子操作。而 `int[] temp = new int[] { i, j };` 是方法内部定义的局部变量，每个线程都会有各自的局部变量，互不影响，并且互不可见，并不需要同步。
+
+#### 同步代码块
+使用步骤：
+1. 找出修改共享变量的线程代码块；
+2. 选择一个共享实例作为锁；
+3. 使用 synchronized (lockObject) { ... }。
+
+#### 同步方法
+当 Java 程序依靠 synchronized 对线程进行同步的时候，锁住的是哪个对象非常重要。让线程自己选择锁对象往往会使得代码逻辑混乱，也不利于封装。更好的方法是把 synchronized 逻辑封装起来。
+
+以下两种实现等价：
+```java
+class Counter {
+    public void add(int n) {
+        synchronized(this) { // 锁住 this
+            count += n;
+        } // 解锁
+    }
+}
+```
+```java
+class Counter {
+    public synchronized void add(int n) { // 锁住 this
+        count += n;
+    } // 解锁
+}
+```
+
+对于 static 方法，是没有 this 实例的，因为 static 方法是针对类而不是实例。但是我们注意到任何一个类都有一个由 JVM 自动创建的 Class 实例，因此，对 static 方法添加 synchronized，锁住的是该类的 Class 实例。如：
+```java
+class Counter {
+    public static void add(int n) {
+        synchronized(Counter.class) { // 锁住 Counter.class
+            count += n;
+        } // 解锁
+    }
+}
+```
+
+
+
+
+
+
+### 同步锁
+
+
+
+
+
+
+
+
+
+### synchronized VS. 同步锁
+
+
+
+
+
+
+
+
+
+
+
+
