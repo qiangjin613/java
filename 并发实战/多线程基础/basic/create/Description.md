@@ -2,7 +2,7 @@
 - 继承 Thread 类
 - 实现 Runnable 接口
 - 使用 Callable 和 Future
->Java 使用 Thread 类代表线程，所有的线程对象都必须是 Thread 类或其字类的实例。（对于以上所表述的创建方式，最终都回归到了 Thread）
+> Java 使用 Thread 类代表线程，所有的线程对象都必须是 Thread 类或其字类的实例。（对于以上所表述的创建方式，最终都回归到了 Thread）
 
 #### 三种实现方式的对比
 | 继承 Thread 类 | 实现 Runnable 接口 | 使用 Callable 和 Future |
@@ -69,10 +69,13 @@ Thread 提供了以下构造器：
     - public final synchronized void join(long millis) throws InterruptedException [^2]
     - public static native void sleep(long millis) throws InterruptedException
     - public static native void yield()
+    - public void interrupt()
 2. 获取线程相关信息
     - public static native Thread currentThread()
-    - public final native boolean isAlive()
+    - public static boolean interrupted()
     - public static int activeCount()
+    - public final native boolean isAlive()
+    - public boolean isInterrupted()
     - public State getState()
 
 内部类：
