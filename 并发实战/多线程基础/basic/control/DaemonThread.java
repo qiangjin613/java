@@ -30,4 +30,5 @@ public class DaemonThread extends Thread {
 Note:
 1. 如果要将某个线程设置为后台线程，必须要在该线程启动之前设置（即，setDaemon 在 start 之前），否则引发 IllegalThreadStateException 异常
 2. 前台线程死亡后，JVM 通知后台线程死亡，在这个之间，从接收指令到做出相应需要一定时间
+3. 在守护线程中，不能持有任何需要关闭的资源.例如打开文件等，因为虚拟机退出时，守护线程没有任何机会来关闭文件，这会导致数据丢失。
  */
