@@ -178,3 +178,28 @@ class CounterTest2 {
 在上述示例中，对需要同步的线程分成两组：Teacher 和 Student 组，组之间不存在竞争。因此，应该使用两个不同的锁：teacherLock 和 stuLock。
 这样才能最大化地提高执行效率。
  */
+
+
+/*
+案例四：对 Java 的 synchronized 线程锁的可重入性进行测试
+ */
+class Counter3 {
+    private int count = 0;
+
+    public synchronized void add(int n) {
+        if (n < 0) {
+            dec(-n);
+        } else {
+            count += n;
+        }
+    }
+    public synchronized void dec(int n) {
+        count += n;
+    }
+}
+class CounterTest3 {
+    public static void main(String[] args) {
+        Counter3 counter3 = new Counter3();
+        counter3.add(1);
+    }
+}
