@@ -1,7 +1,7 @@
 package basic.synchronize;
 
 class A {
-    public synchronized void f(B b) {
+    public synchronized void f(B b) { /* 获得 A 的对象锁 */
         System.out.println(Thread.currentThread().getName() + " 进入了 A 对象的 f()");
         try {
             Thread.sleep(100);
@@ -9,8 +9,8 @@ class A {
             e.printStackTrace();
         }
         System.out.println(Thread.currentThread().getName() + " 将要调用 B 对象的 last()");
-        b.last();
-    }
+        b.last(); /* 准备获得 B 的对象锁 */
+    } /* 释放 A 的对象锁 */
 
     public synchronized void last() {
         System.out.println(Thread.currentThread().getName() + " 进入了 a 对象的 last()");
@@ -67,4 +67,7 @@ Output:（情况之一）
 5. 线程甲调用 A 对象的 last() --> 要获得 A 对象的锁，但这时 A 对象已经被锁定，要等待 A 对象的 f() 执行完才会释放锁
 6. 线程乙调用 B 对象的 last() --> 要获得 B 对象的锁，但这时 B 对象已经被锁定，要等待 B 对象的 f() 执行完才会释放锁
 （互相等待对方释放锁，形成“死锁”）
+
+如何避免死锁：
+线程（在不同方法中）获取锁的顺序要一致。
  */

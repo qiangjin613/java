@@ -187,7 +187,7 @@ class Counter3 {
     private int count = 0;
 
     public synchronized void add(int n) {
-        if (n < 0) {
+        if (count > 0) {
             dec(-n);
         } else {
             count += n;
@@ -199,7 +199,12 @@ class Counter3 {
 }
 class CounterTest3 {
     public static void main(String[] args) {
-        Counter3 counter3 = new Counter3();
-        counter3.add(1);
+        Counter3 c = new Counter3();
+        for (int i = 0; i < 100; i++) {
+            c.add(i);
+        }
     }
 }
+/*
+上述示例中，如果进入到 dec() 内部，说明了，在获取到 this 锁的情况下再次进行加锁。
+ */
