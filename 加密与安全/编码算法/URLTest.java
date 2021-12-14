@@ -14,7 +14,7 @@ public class URLTest {
         String encoded = null;
         try {
             // 编码
-            encoded = URLEncoder.encode("中文!", StandardCharsets.UTF_8.name());
+            encoded = URLEncoder.encode("中 文 !", StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -22,6 +22,7 @@ public class URLTest {
 
         String decoded = null;
         try {
+            // 解码
             decoded = URLDecoder.decode(encoded, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
