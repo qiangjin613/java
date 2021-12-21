@@ -124,7 +124,7 @@ public interface Iterator<E> {
 
 ## Spliterator 接口
 
-用于遍历和划分源元素的对象。Spliterator覆盖的元素的源可以是数组、集合、IO通道或生成器函数。
+用于遍历和划分源元素的对象。Spliterator 覆盖的元素的源可以是数组、集合、IO 通道或生成器函数。
 
 Spliterator（splitable iterator，可分割迭代器），自从 1.8 发布后，对于并行处理的能力大大增强，Spliterator 就是为了并行遍历元素而设计的一个迭代器。
 
