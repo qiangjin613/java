@@ -238,7 +238,7 @@ public interface ListIterator<E> extends Iterator<E> {
 
 ### 使用示例
 
-移步：
+移步：https://github.com/qiangjin613/java-notes/blob/main/chapter_12_%E9%9B%86%E5%90%88/%E8%BF%AD%E4%BB%A3%E5%99%A8
 
 #### 参考资料
 
