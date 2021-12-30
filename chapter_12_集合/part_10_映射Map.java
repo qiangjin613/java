@@ -53,3 +53,114 @@ class MapOfList {
         }
     }
 }
+
+
+/**
+ * HashMap 在并发场景下的死循环（Infinite Loop）
+ */
+class HashMapInfiniteLoop {
+    private static HashMap<Integer, String> map = new HashMap<>(2, 0.75f);
+
+    public static void main(String[] args) {
+        map.put(5, "C");
+        new Thread("Thread1") {
+            @Override
+            public void run() {
+                map.put(7, "8");
+                System.out.println(map);
+            }
+        }.start();
+        new Thread("Thread2") {
+            @Override
+            public void run() {
+                map.put(3, "A");
+                System.out.println(map);
+            }
+        }.start();
+
+        Thread.yield();
+        System.out.println(map.get(11));
+        System.out.println("end");
+    }
+}
+
+
+
+
+/****************** 测试 HashMap 的性能 ********************/
+
+/**
+ * 一个工具类 Key
+ */
+class Key implements Comparable<Key> {
+
+    private final int value;
+
+    Key(int value) {
+        this.value = value;
+    }
+
+    @Override
+    public int compareTo(Key o) {
+        return Integer.compare(this.value, o.value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Key key = (Key) o;
+        return value == key.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return value;
+    }
+}
+
+/**
+ * Keys 的缓存实例
+ */
+class Keys {
+    public static final int MAX_KEY = 10_000_000;
+    public static final Key[] KEYS_CACHE = new Key[MAX_KEY];
+
+    static {
+        for (int i = 0; i < MAX_KEY; i++) {
+            KEYS_CACHE[i] = new Key(i);
+        }
+    }
+
+    public static Key of(int value) {
+        return KEYS_CACHE[value];
+    }
+}
+
+/**
+ * 现在开始我们的试验，创建不同size的HashMap（1、10、100、......10000000），屏蔽了扩容的情况
+ */
+class TestHashMap {
+    static void test(int mapSize) {
+        HashMap<Key, Integer> map = new HashMap<>(mapSize);
+        for (int i = 0; i < mapSize; i++) {
+            map.put(Keys.of(i), i);
+        }
+
+        long beginTime = System.nanoTime(); /* 获取纳秒 */
+        for (int i = 0; i < mapSize; i++) {
+            map.get(Keys.of(i));
+        }
+
+        long endTime = System.nanoTime();
+        /* 计算getKey的平均时间，我们遍历所有的get方法，计算总的时间，除以key的数量，计算一个平均值 */
+        System.out.println((endTime - beginTime) * 1.0 / mapSize);
+    }
+
+    public static void main(String[] args) {
+        for (int i = 10; i < 10_000_000; i *= 10) {
+            test(i);
+        }
+    }
+}
