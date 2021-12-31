@@ -6,6 +6,7 @@
 因为它们可以安全地将对象从一个任务传输到另一个任务。
  */
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -97,3 +98,21 @@ PriorityQueue 与 内置类型（Integer、String 和 Character 等）一起工�
 则必须包含额外的功能以产生自然排序，
 或者必须提供自己的 Comparator 。
  */
+
+/**
+ * 与获取接口不同，方法可以获取到继承了基类的方法和仅获取当前类中的方法：
+ * class.getMethods(): 获取当前类所有的方法；
+ * class.getDeclaredMethods(): 仅获取当前类中的方法（不包括继承基类和接口中的方法）。
+ */
+class TestQueue {
+    public static void main(String[] args) {
+        Class<Queue> queueClass = Queue.class;
+        for (Method method : queueClass.getMethods()) {
+            System.out.println(method);
+        }
+
+        for (Method method : queueClass.getDeclaredMethods()) {
+            System.out.println(method);
+        }
+    }
+}
