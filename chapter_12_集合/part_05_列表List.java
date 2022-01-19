@@ -10,24 +10,32 @@ import java.util.*;
 
 class ListFeatures {
     public static void main(String[] args) {
-        List<Pet> pets = Pets.list(7);
-        System.out.println(pets);
-        /* “洗牌”操作 */
-        Collections.shuffle(pets);
-        System.out.println(pets);
+//        List<Pet> pets = Pets.list(7);
+//        System.out.println(pets);
+//        /* “洗牌”操作 */
+//        Collections.shuffle(pets);
+//        System.out.println(pets);
+//
+//        /* List -> Array */
+//        Object[] objects = pets.toArray();
+//        System.out.println(Arrays.toString(objects));
+//
+//        /* 其内部使用了 equals() 进行比较 */
+//        pets.indexOf(pets.get(2));
+//
+//        List<Pet> sub = Arrays.asList(pets.get(2), pets.get(4), pets.get(6));
+//
+//        List<Integer> intList = Arrays.asList(new Integer[]{1, 2, 3, 4});
+//        Integer[] intArray = intList.toArray(new Integer[]{5, 6, 7});
+//        System.out.println(Arrays.toString(intArray));
 
-        /* List -> Array */
-        Object[] objects = pets.toArray();
-        System.out.println(Arrays.toString(objects));
-
-        /* 其内部使用了 equals() 进行比较 */
-        pets.indexOf(pets.get(2));
-
-        List<Pet> sub = Arrays.asList(pets.get(2), pets.get(4), pets.get(6));
-
-        List<Integer> intList = Arrays.asList(new Integer[]{1, 2, 3, 4});
-        Integer[] intArray = intList.toArray(new Integer[]{5, 6, 7});
-        System.out.println(Arrays.toString(intArray));
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            list.add(i + "asdf");
+        }
+        List<String> list1 = list.subList(0, 5);
+        list1.clear();
+        System.out.println("end");
     }
 }
 /*
