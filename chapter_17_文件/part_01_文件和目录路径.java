@@ -17,22 +17,6 @@ import java.nio.file.Paths;
  * Paths、Path、Files 示例：
  */
 class PathInfo {
-    static void show(String desc, Object p) {
-        System.out.println(desc + ": " + p);
-    }
-
-    static void info(Path p) {
-        show("toString", p);
-        show("Exists", Files.exists(p));
-        show("RegularFile", Files.isRegularFile(p));
-        // 判断是一个路径还是文件：
-        show("Directory", Files.isDirectory(p));
-        show("Absolute", p.isAbsolute());
-        show("FileName", p.getFileName());
-        show("Parent", p.getParent());
-        show("Root", p.getRoot());
-        System.out.println("--- --- --- ---");
-    }
 
     public static void main(String[] args) {
         System.out.println(System.getProperty("os.name")); // Output: Windows 10
@@ -60,6 +44,23 @@ class PathInfo {
         System.out.println(Files.exists(puri));
 
         File f = ap.toFile();
+    }
+
+    static void info(Path p) {
+        show("toString", p);
+        show("Exists", Files.exists(p));
+        show("RegularFile", Files.isRegularFile(p));
+        // 判断是一个路径还是文件：
+        show("Directory", Files.isDirectory(p));
+        show("Absolute", p.isAbsolute());
+        show("FileName", p.getFileName());
+        show("Parent", p.getParent());
+        show("Root", p.getRoot());
+        System.out.println("--- --- --- ---");
+    }
+
+    static void show(String desc, Object p) {
+        System.out.println(desc + ": " + p);
     }
 }
 /*
