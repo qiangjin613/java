@@ -6,6 +6,7 @@ import java.io.IOException;
 /**
  * java.io.FileInputStream 示例：使用 read 读取文件数据。
  *
+ * @see     example.outputstream.FileOutputStreamExample
  * @author  qiangj
  */
 public class FileInputStreamExample {
@@ -42,7 +43,8 @@ public class FileInputStreamExample {
      * <ul>
      * <li> 读取多字节的数据时，也会出现乱码。
      *      即使使用了相同的字符集（如文件的读写都是 UTF-8），也会因缓冲区 byte[] 的长度问题，造成部分的数据乱码
-     *      （如：3 个中文是 9 个字符，从字节流中读取 8 个字符进行解码，必然会造成数据的乱码）
+     *      （如：3 个中文是 9 个字符，从字节流中读取 8 个字符进行解码，必然会造成数据的乱码）。
+     *      彻底解决乱码问题，使用文件字符流 FileReader/FileWriter 进行操作
      * </ul>
      */
     public static void readFile2() {
