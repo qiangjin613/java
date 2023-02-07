@@ -1,4 +1,4 @@
-package example;
+package example.file;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ public class FileCopyExample {
     }
 
     /**
-     * 思路 1
+     * 方式 1：使用文件输入输出流 copy 文件
      * <ol>
      * <li> 创建文件输入流读取文件
      * <li> 创建文件输出流，将读取的文件数据写入指定的文件

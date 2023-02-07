@@ -54,6 +54,7 @@ public class FileInputStreamExample {
             // 一次读取 8 个字节
             byte[] byteBufferArray = new byte[8];
             while ((byteDataLength = fileInputStream.read(byteBufferArray)) != -1) {
+                // 为了避免上此读取数据造成的遗留问题，这里对 byteBufferArray 指定字节的顺序进行读取
                 System.out.print(new String(byteBufferArray, 0, byteDataLength));
             }
         } catch (IOException e) {

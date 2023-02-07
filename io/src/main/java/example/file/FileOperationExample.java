@@ -15,7 +15,7 @@ import java.io.IOException;
  *
  * <ul>
  * <li> createNewFile()/mkdir()/mkdirs 创建存在的文件/目录时，返回 false。
- * <li> 在删除目录时，不可删除嵌套目录，要从最内层开始删除才行。
+ * <li> 使用 java.io.File#delete() 删除目录时，不能直接删除嵌套目录，要从最内层开始删除才行。
  * </ul>
  *
  * @author  qiangj
