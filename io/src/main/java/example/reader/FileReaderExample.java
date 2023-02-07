@@ -3,6 +3,9 @@ package example.reader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * java.io.FileReader 使用示例
+ */
 public class FileReaderExample {
     public static void main(String[] args) {
         readFile();

@@ -3,22 +3,28 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="-853.5" y="67.0">java.io.ObjectInputStream</node>
-    <node x="-630.5" y="-53.0">java.io.InputStream</node>
+    <node x="-670.5" y="-53.0">java.io.InputStream</node>
     <node x="-819.0" y="-173.0">java.io.File</node>
-    <node x="-780.5" y="187.0">java.io.BufferedInputStream</node>
-    <node x="-518.0" y="-293.0">java.lang.AutoCloseable</node>
-    <node x="-666.5" y="-293.0">java.io.Serializable</node>
-    <node x="-561.0" y="-173.0">java.io.Closeable</node>
     <node x="-411.0" y="-53.0">java.io.Reader</node>
-    <node x="-454.5" y="67.0">java.io.InputStreamReader</node>
-    <node x="-648.0" y="67.0">java.io.FilterInputStream</node>
     <node x="-563.0" y="187.0">java.io.FileReader</node>
+    <node x="-648.0" y="67.0">java.io.FilterInputStream</node>
+    <node x="-378.0" y="187.0">java.io.BufferedReader</node>
+    <node x="-853.5" y="67.0">java.io.ObjectInputStream</node>
+    <node x="-780.5" y="187.0">java.io.BufferedInputStream</node>
+    <node x="-666.5" y="-293.0">java.io.Serializable</node>
+    <node x="-454.5" y="67.0">java.io.InputStreamReader</node>
+    <node x="-561.0" y="-173.0">java.io.Closeable</node>
     <node x="-419.0" y="-173.0">java.lang.Readable</node>
+    <node x="-518.0" y="-293.0">java.lang.AutoCloseable</node>
     <node x="-865.5" y="-293.0">java.lang.Comparable</node>
+    <node x="-191.5" y="237.5">java.io.LineNumberReader</node>
   </nodes>
   <notes />
   <edges>
+    <edge source="java.io.Closeable" target="java.lang.AutoCloseable" relationship="INTERFACE_GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="-60.0" y="14.0" />
+    </edge>
     <edge source="java.io.ObjectInputStream" target="java.lang.AutoCloseable" relationship="REALIZATION">
       <point x="-91.5" y="0.0" />
       <point x="-883.0" y="81.0" />
@@ -26,32 +32,23 @@
       <point x="-442.0" y="-310.5" />
       <point x="0.0" y="-14.0" />
     </edge>
-    <edge source="java.io.Closeable" target="java.lang.AutoCloseable" relationship="INTERFACE_GENERALIZATION">
-      <point x="0.0" y="-14.0" />
-      <point x="-60.0" y="14.0" />
-    </edge>
-    <edge source="java.io.InputStreamReader" target="java.io.Reader" relationship="GENERALIZATION">
-      <point x="0.0" y="-14.0" />
-      <point x="0.0" y="14.0" />
-    </edge>
     <edge source="java.io.FileReader" target="java.io.InputStreamReader" relationship="GENERALIZATION">
       <point x="55.0" y="-14.0" />
       <point x="-85.0" y="14.0" />
     </edge>
     <edge source="java.io.FilterInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
-      <point x="0.0" y="-14.0" />
-      <point x="0.0" y="14.0" />
+      <point x="-0.0" y="-14.0" />
+      <point x="-562.0" y="21.0" />
+      <point x="-602.0" y="21.0" />
+      <point x="-0.0" y="14.0" />
     </edge>
     <edge source="java.io.Reader" target="java.lang.Readable" relationship="REALIZATION">
       <point x="0.0" y="-14.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.InputStream" target="java.io.Closeable" relationship="REALIZATION">
-      <point x="68.5" y="0.0" />
-      <point x="-456.0" y="-39.0" />
-      <point x="-456.0" y="-70.5" />
-      <point x="-502.0" y="-70.5" />
-      <point x="0.0" y="14.0" />
+      <point x="61.0" y="-14.0" />
+      <point x="-39.0" y="14.0" />
     </edge>
     <edge source="java.io.Reader" target="java.io.Closeable" relationship="REALIZATION">
       <point x="-49.0" y="0.0" />
@@ -64,25 +61,39 @@
       <point x="0.0" y="-14.0" />
       <point x="0.0" y="14.0" />
     </edge>
+    <edge source="java.io.InputStreamReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.LineNumberReader" target="java.io.BufferedReader" relationship="GENERALIZATION">
+      <point x="-0.0" y="-14.0" />
+      <point x="-99.0" y="201.0" />
+      <point x="79.0" y="-0.0" />
+    </edge>
+    <edge source="java.io.ObjectInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
+      <point x="-0.0" y="-14.0" />
+      <point x="-762.0" y="21.0" />
+      <point x="-602.0" y="21.0" />
+      <point x="-0.0" y="14.0" />
+    </edge>
     <edge source="java.io.File" target="java.io.Serializable" relationship="REALIZATION">
       <point x="37.0" y="0.0" />
       <point x="-602.0" y="-159.0" />
       <point x="0.0" y="14.0" />
     </edge>
-    <edge source="java.io.ObjectInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
-      <point x="0.0" y="-14.0" />
-      <point x="-762.0" y="21.0" />
-      <point x="-562.0" y="21.0" />
-      <point x="0.0" y="14.0" />
+    <edge source="java.io.BufferedReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="47.0" y="-14.0" />
+      <point x="-252.0" y="-39.0" />
+      <point x="49.0" y="-0.0" />
     </edge>
     <edge source="java.io.BufferedInputStream" target="java.io.FilterInputStream" relationship="GENERALIZATION">
       <point x="91.0" y="-14.0" />
       <point x="-29.0" y="14.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Compact" zoom="1.5" showDependencies="false" x="-566.0" y="-38.0" />
+  <settings layout="Hierarchic Compact" zoom="1.0" showDependencies="false" x="-99.0" y="251.5" />
   <SelectedNodes>
-    <node>java.io.InputStream</node>
+    <node>java.io.LineNumberReader</node>
   </SelectedNodes>
   <Categories />
   <SCOPE>All</SCOPE>
