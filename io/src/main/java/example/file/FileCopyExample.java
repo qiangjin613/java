@@ -1,6 +1,8 @@
 package example.file;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * 文件输入/输出流综合应用：文件拷贝
@@ -13,6 +15,7 @@ public class FileCopyExample {
     public static void main(String[] args) {
         fileCopy();
         fileCopy2();
+        fileCopy3();
     }
 
     /**
@@ -52,12 +55,36 @@ public class FileCopyExample {
     private static void fileCopy2() {
         String fileSourcePath = "D:\\CodeRepositories\\java\\io\\src\\main\\java\\example\\file\\FileCopyExample.java";
         String fileTargetPath = "D:\\FileCopyExample2.java.txt";
+        // 读取写二进制文件，造成的文件损坏
+        // String fileSourcePath = "D:\\aaa.png";
+        // String fileTargetPath = "D:\\aaa（3）.png";
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileSourcePath));
              BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileTargetPath))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 bufferedWriter.write(line);
                 bufferedWriter.newLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 方式 3：使用 java.io.BufferedInputStream 和 java.io.BufferedOutputStream copy 文件
+     * <p>
+     * Think：可以使用字节流操作文本文件吗？    |-->  当然ok
+     */
+    private static void fileCopy3() {
+        String fileSourcePath = "D:\\aaa.png";
+        String fileTargetPath = "D:\\aaa（2）.png";
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(Paths.get(fileSourcePath)));
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(Files.newOutputStream(Paths.get(fileTargetPath)))) {
+            // 这里使用字节数组做一个缓冲
+            byte[] byteDataArray = new byte[1024];
+            int readLength;
+            while ((readLength = bufferedInputStream.read(byteDataArray)) != -1) {
+                bufferedOutputStream.write(byteDataArray, 0, readLength);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

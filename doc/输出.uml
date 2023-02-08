@@ -3,21 +3,52 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="54.5" y="106.0">java.lang.Appendable</node>
-    <node x="-44.5" y="226.0">java.io.Writer</node>
-    <node x="-97.0" y="106.0">java.io.Closeable</node>
-    <node x="-94.0" y="-14.0">java.lang.AutoCloseable</node>
-    <node x="-94.5" y="346.0">java.io.OutputStreamWriter</node>
-    <node x="-56.5" y="466.0">java.io.FileWriter</node>
+    <node x="17.0" y="-14.0">java.lang.AutoCloseable</node>
+    <node x="-92.5" y="486.0">java.io.BufferedOutputStream</node>
+    <node x="185.5" y="106.0">java.lang.Appendable</node>
+    <node x="-82.0" y="246.0">java.io.OutputStream</node>
+    <node x="87.0" y="366.0">java.io.FileOutputStream</node>
+    <node x="154.5" y="486.0">java.io.FileWriter</node>
+    <node x="-105.5" y="106.0">java.io.Flushable</node>
+    <node x="-99.5" y="366.0">java.io.FilterOutputStream</node>
+    <node x="166.5" y="246.0">java.io.Writer</node>
+    <node x="34.0" y="106.0">java.io.Closeable</node>
+    <node x="116.5" y="366.0">java.io.OutputStreamWriter</node>
   </nodes>
   <notes />
   <edges>
+    <edge source="java.io.OutputStream" target="java.io.Flushable" relationship="REALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="40.0" y="14.0" />
+    </edge>
     <edge source="java.io.Closeable" target="java.lang.AutoCloseable" relationship="INTERFACE_GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="-20.0" y="14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.OutputStream" target="java.io.Closeable" relationship="REALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="-7.0" y="220.0" />
+      <point x="93.0" y="220.0" />
+      <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.OutputStreamWriter" target="java.io.Writer" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.FilterOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.Writer" target="java.io.Flushable" relationship="REALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="213.0" y="200.0" />
+      <point x="-7.0" y="200.0" />
+      <point x="40.0" y="14.0" />
+    </edge>
+    <edge source="java.io.BufferedOutputStream" target="java.io.FilterOutputStream" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="13.0" y="460.0" />
+      <point x="-7.0" y="460.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.FileWriter" target="java.io.OutputStreamWriter" relationship="GENERALIZATION">
@@ -26,16 +57,24 @@
     </edge>
     <edge source="java.io.Writer" target="java.io.Closeable" relationship="REALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="40.0" y="14.0" />
+      <point x="213.0" y="180.0" />
+      <point x="93.0" y="180.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.FileOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="174.0" y="340.0" />
+      <point x="-26.0" y="340.0" />
+      <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.Writer" target="java.lang.Appendable" relationship="REALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="2.0" y="200.0" />
-      <point x="122.0" y="200.0" />
+      <point x="213.0" y="220.0" />
+      <point x="253.0" y="220.0" />
       <point x="0.0" y="14.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Compact" zoom="1.5" showDependencies="false" x="56.5" y="250.0" />
+  <settings layout="Hierarchic Compact" zoom="1.0" showDependencies="false" x="107.5" y="250.0" />
   <SelectedNodes />
   <Categories />
   <SCOPE>All</SCOPE>
