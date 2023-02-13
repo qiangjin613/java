@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="112.5" y="406.0">java.io.StringWriter</node>
+    <node x="-90.0" y="106.0">java.io.StringReader</node>
+    <node x="233.5" y="106.0">java.io.FilterReader</node>
+    <node x="-58.5" y="526.0">java.io.FileWriter</node>
+    <node x="739.0" y="406.0">java.io.CharArrayWriter</node>
+    <node x="-46.5" y="286.0">java.io.Writer</node>
+    <node x="587.5" y="106.0">java.io.InputStreamReader</node>
+    <node x="596.0" y="406.0">java.io.FilterWriter</node>
+    <node x="923.5" y="406.0">java.io.BufferedWriter</node>
+    <node x="71.0" y="106.0">java.io.PipedReader</node>
+    <node x="-96.5" y="406.0">java.io.OutputStreamWriter</node>
+    <node x="396.0" y="106.0">java.io.CharArrayReader</node>
+    <node x="277.0" y="406.0">java.io.PrintWriter</node>
+    <node x="434.0" y="406.0">java.io.PipedWriter</node>
+    <node x="801.0" y="106.0">java.io.BufferedReader</node>
+    <node x="-69.0" y="-14.0">java.io.Reader</node>
+    <node x="619.0" y="226.0">java.io.FileReader</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.io.FileReader" target="java.io.InputStreamReader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.PrintWriter" target="java.io.Writer" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="340.0" y="380.0" />
+      <point x="0.0" y="380.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.StringWriter" target="java.io.Writer" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="180.0" y="380.0" />
+      <point x="0.0" y="380.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.PipedReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="140.0" y="80.0" />
+      <point x="-20.0" y="80.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.FileWriter" target="java.io.OutputStreamWriter" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.FilterReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="300.0" y="80.0" />
+      <point x="-20.0" y="80.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.StringReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.CharArrayWriter" target="java.io.Writer" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="820.0" y="380.0" />
+      <point x="0.0" y="380.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.InputStreamReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="680.0" y="80.0" />
+      <point x="-20.0" y="80.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.FilterWriter" target="java.io.Writer" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="660.0" y="380.0" />
+      <point x="0.0" y="380.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.OutputStreamWriter" target="java.io.Writer" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.CharArrayReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="480.0" y="80.0" />
+      <point x="-20.0" y="80.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.BufferedWriter" target="java.io.Writer" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="1000.0" y="380.0" />
+      <point x="0.0" y="380.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.PipedWriter" target="java.io.Writer" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="500.0" y="380.0" />
+      <point x="0.0" y="380.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.BufferedReader" target="java.io.Reader" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="880.0" y="80.0" />
+      <point x="-20.0" y="80.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.9346733668341709" showDependencies="false" x="500.0" y="330.2016129032258" />
+  <SelectedNodes>
+    <node>java.io.Writer</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
