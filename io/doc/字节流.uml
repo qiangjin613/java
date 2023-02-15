@@ -3,36 +3,56 @@
   <ID>JAVA</ID>
   <OriginalElement />
   <nodes>
-    <node x="342.0" y="426.0">java.io.PipedInputStream</node>
-    <node x="-78.5" y="306.0">java.io.InputStream</node>
-    <node x="538.5" y="426.0">java.io.ObjectInputStream</node>
-    <node x="-108.5" y="546.0">java.io.BufferedInputStream</node>
-    <node x="299.0" y="546.0">java.security.DigestInputStream</node>
-    <node x="763.0" y="106.0">java.io.FileOutputStream</node>
-    <node x="-85.0" y="-14.0">java.io.OutputStream</node>
-    <node x="107.5" y="426.0">java.io.SequenceInputStream</node>
-    <node x="-101.5" y="226.0">java.io.DataOutputStream</node>
-    <node x="-96.0" y="426.0">java.io.FilterInputStream</node>
-    <node x="335.0" y="106.0">java.io.PipedOutputStream</node>
-    <node x="-102.5" y="106.0">java.io.FilterOutputStream</node>
-    <node x="928.0" y="426.0">java.io.ByteArrayInputStream</node>
-    <node x="749.5" y="426.0">java.io.FileInputStream</node>
-    <node x="552.0" y="106.0">java.io.ObjectOutputStream</node>
-    <node x="324.5" y="226.0">java.io.BufferedOutputStream</node>
-    <node x="101.0" y="106.0">java.io.ByteArrayOutputStream</node>
-    <node x="112.5" y="226.0">java.security.DigestOutputStream</node>
-    <node x="105.0" y="546.0">java.io.DataInputStream</node>
+    <node x="1075.5" y="477.0">java.io.SequenceInputStream</node>
+    <node x="903.0" y="157.0">java.io.PipedOutputStream</node>
+    <node x="870.0" y="477.0">java.io.PipedInputStream</node>
+    <node x="677.5" y="477.0">java.io.FileInputStream</node>
+    <node x="49.5" y="357.0">java.io.InputStream</node>
+    <node x="659.5" y="597.0">java.io.BufferedInputStream</node>
+    <node x="711.0" y="157.0">java.io.FileOutputStream</node>
+    <node x="43.0" y="37.0">java.io.OutputStream</node>
+    <node x="236.0" y="597.0">java.io.PushbackInputStream</node>
+    <node x="646.5" y="277.0">java.io.DataOutputStream</node>
+    <node x="473.0" y="597.0">java.io.DataInputStream</node>
+    <node x="466.5" y="477.0">java.io.ObjectInputStream</node>
+    <node x="-108.5" y="-13.5">java.io.Flushable</node>
+    <node x="412.5" y="277.0">java.io.BufferedOutputStream</node>
+    <node x="52.0" y="277.0">java.io.PrintStream</node>
+    <node x="32.0" y="477.0">java.io.FilterInputStream</node>
+    <node x="236.0" y="477.0">java.io.ByteArrayInputStream</node>
+    <node x="262.0" y="-13.5">java.lang.AutoCloseable</node>
+    <node x="469.0" y="157.0">java.io.ByteArrayOutputStream</node>
+    <node x="240.0" y="157.0">java.io.ObjectOutputStream</node>
+    <node x="25.5" y="157.0">java.io.FilterOutputStream</node>
   </nodes>
   <notes />
   <edges>
+    <edge source="java.io.ObjectInputStream" target="java.lang.AutoCloseable" relationship="REALIZATION">
+      <point x="15.0" y="-14.0" />
+      <point x="573.0" y="331.0" />
+      <point x="210.0" y="331.0" />
+      <point x="210.0" y="236.0" />
+      <point x="1193.0" y="236.0" />
+      <point x="1193.0" y="57.5" />
+      <point x="368.0" y="57.5" />
+      <point x="368.0" y="98.0" />
+      <point x="338.0" y="98.0" />
+      <point x="-0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.PushbackInputStream" target="java.io.FilterInputStream" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="338.0" y="571.0" />
+      <point x="118.0" y="571.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
     <edge source="java.io.FilterInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.FileInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="830.0" y="400.0" />
-      <point x="-10.0" y="400.0" />
+      <point x="758.0" y="451.0" />
+      <point x="118.0" y="451.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.FilterOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
@@ -41,88 +61,123 @@
     </edge>
     <edge source="java.io.ObjectOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="650.0" y="80.0" />
-      <point x="-10.0" y="80.0" />
+      <point x="338.0" y="131.0" />
+      <point x="118.0" y="131.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.PipedOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="430.0" y="80.0" />
-      <point x="-10.0" y="80.0" />
+      <point x="998.0" y="131.0" />
+      <point x="118.0" y="131.0" />
       <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.OutputStream" target="java.lang.AutoCloseable" relationship="REALIZATION">
+      <point x="15.0" y="14.0" />
+      <point x="133.0" y="98.0" />
+      <point x="338.0" y="98.0" />
+      <point x="-0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.PrintStream" target="java.lang.AutoCloseable" relationship="REALIZATION">
+      <point x="66.0" y="-0.0" />
+      <point x="210.0" y="291.0" />
+      <point x="210.0" y="236.0" />
+      <point x="1193.0" y="236.0" />
+      <point x="1193.0" y="57.5" />
+      <point x="368.0" y="57.5" />
+      <point x="368.0" y="98.0" />
+      <point x="338.0" y="98.0" />
+      <point x="-0.0" y="14.0" />
     </edge>
     <edge source="java.io.BufferedOutputStream" target="java.io.FilterOutputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="430.0" y="200.0" />
-      <point x="-10.0" y="200.0" />
-      <point x="0.0" y="14.0" />
-    </edge>
-    <edge source="java.io.FileOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
-      <point x="0.0" y="-14.0" />
-      <point x="850.0" y="80.0" />
-      <point x="-10.0" y="80.0" />
+      <point x="518.0" y="251.0" />
+      <point x="118.0" y="251.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.DataInputStream" target="java.io.FilterInputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="190.0" y="520.0" />
-      <point x="-10.0" y="520.0" />
+      <point x="558.0" y="571.0" />
+      <point x="118.0" y="571.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.FileOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="798.0" y="131.0" />
+      <point x="118.0" y="131.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.ByteArrayOutputStream" target="java.io.OutputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="210.0" y="80.0" />
-      <point x="-10.0" y="80.0" />
+      <point x="578.0" y="131.0" />
+      <point x="118.0" y="131.0" />
       <point x="0.0" y="14.0" />
     </edge>
-    <edge source="java.security.DigestInputStream" target="java.io.FilterInputStream" relationship="GENERALIZATION">
-      <point x="0.0" y="-14.0" />
-      <point x="390.0" y="520.0" />
-      <point x="-10.0" y="520.0" />
-      <point x="0.0" y="14.0" />
+    <edge source="java.io.OutputStream" target="java.io.Flushable" relationship="REALIZATION">
+      <point x="-75.0" y="-0.0" />
+      <point x="-50.0" y="51.0" />
+      <point x="-0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.InputStream" target="java.lang.AutoCloseable" relationship="REALIZATION">
+      <point x="68.5" y="-0.0" />
+      <point x="210.0" y="371.0" />
+      <point x="210.0" y="236.0" />
+      <point x="1193.0" y="236.0" />
+      <point x="1193.0" y="57.5" />
+      <point x="368.0" y="57.5" />
+      <point x="368.0" y="98.0" />
+      <point x="338.0" y="98.0" />
+      <point x="-0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.ObjectOutputStream" target="java.lang.AutoCloseable" relationship="REALIZATION">
+      <point x="15.0" y="-14.0" />
+      <point x="353.0" y="98.0" />
+      <point x="338.0" y="98.0" />
+      <point x="-0.0" y="14.0" />
     </edge>
     <edge source="java.io.DataOutputStream" target="java.io.FilterOutputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
+      <point x="738.0" y="251.0" />
+      <point x="118.0" y="251.0" />
       <point x="0.0" y="14.0" />
     </edge>
-    <edge source="java.security.DigestOutputStream" target="java.io.FilterOutputStream" relationship="GENERALIZATION">
+    <edge source="java.io.PrintStream" target="java.io.FilterOutputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="210.0" y="200.0" />
-      <point x="-10.0" y="200.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.SequenceInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="210.0" y="400.0" />
-      <point x="-10.0" y="400.0" />
-      <point x="0.0" y="14.0" />
-    </edge>
-    <edge source="java.io.ByteArrayInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
-      <point x="0.0" y="-14.0" />
-      <point x="1030.0" y="400.0" />
-      <point x="-10.0" y="400.0" />
+      <point x="1178.0" y="451.0" />
+      <point x="118.0" y="451.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.ObjectInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="630.0" y="400.0" />
-      <point x="-10.0" y="400.0" />
+      <point x="558.0" y="451.0" />
+      <point x="118.0" y="451.0" />
       <point x="0.0" y="14.0" />
     </edge>
-    <edge source="java.io.BufferedInputStream" target="java.io.FilterInputStream" relationship="GENERALIZATION">
+    <edge source="java.io.ByteArrayInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
+      <point x="338.0" y="451.0" />
+      <point x="118.0" y="451.0" />
       <point x="0.0" y="14.0" />
     </edge>
     <edge source="java.io.PipedInputStream" target="java.io.InputStream" relationship="GENERALIZATION">
       <point x="0.0" y="-14.0" />
-      <point x="430.0" y="400.0" />
-      <point x="-10.0" y="400.0" />
+      <point x="958.0" y="451.0" />
+      <point x="118.0" y="451.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.io.BufferedInputStream" target="java.io.FilterInputStream" relationship="GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="758.0" y="571.0" />
+      <point x="118.0" y="571.0" />
       <point x="0.0" y="14.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Compact" zoom="0.8850118953211736" showDependencies="false" x="511.5" y="280.0" />
+  <settings layout="Hierarchic Compact" zoom="1.0" showDependencies="false" x="522.0" y="279.99999999999994" />
   <SelectedNodes>
-    <node>java.io.FilterOutputStream</node>
+    <node>java.io.OutputStream</node>
   </SelectedNodes>
   <Categories />
   <SCOPE>All</SCOPE>

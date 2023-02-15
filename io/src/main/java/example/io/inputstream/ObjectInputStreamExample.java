@@ -1,4 +1,6 @@
-package example.inputstream;
+package example.io.inputstream;
+
+import example.io.outputstream.ObjectOutputStreamExample;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,7 +11,7 @@ import java.nio.charset.StandardCharsets;
  * java.io.ObjectInputStream 示例：从文件中读取数据，并反序列化
  *
  * @author  qiangj
- * @see     example.outputstream.ObjectOutputStreamExample
+ * @see     ObjectOutputStreamExample
  */
 public class ObjectInputStreamExample {
     public static void main(String[] args) {

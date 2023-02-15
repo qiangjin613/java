@@ -1,4 +1,7 @@
-package example.file;
+package example.io.file;
+
+import example.io.inputstream.FileInputStreamExample;
+import example.io.outputstream.FileOutputStreamExample;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -7,8 +10,8 @@ import java.nio.file.Paths;
 /**
  * 文件输入/输出流综合应用：文件拷贝
  *
- * @see     example.outputstream.FileOutputStreamExample
- * @see     example.inputstream.FileInputStreamExample
+ * @see     FileOutputStreamExample
+ * @see     FileInputStreamExample
  * @author  qiangj
  */
 public class FileCopyExample {

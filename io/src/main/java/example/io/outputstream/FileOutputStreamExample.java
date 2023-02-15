@@ -1,4 +1,6 @@
-package example.outputstream;
+package example.io.outputstream;
+
+import example.io.inputstream.FileInputStreamExample;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -6,7 +8,7 @@ import java.io.IOException;
 /**
  * java.io.FileOutputStream 示例：使用 write 读取文件数据。
  *
- * @see     example.inputstream.FileInputStreamExample
+ * @see     FileInputStreamExample
  * @author  qiangj
  */
 public class FileOutputStreamExample {

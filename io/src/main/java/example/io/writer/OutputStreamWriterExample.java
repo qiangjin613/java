@@ -1,4 +1,4 @@
-package example.writer;
+package example.io.writer;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

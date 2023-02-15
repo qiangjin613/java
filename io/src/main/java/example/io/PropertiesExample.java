@@ -1,4 +1,4 @@
-package example;
+package example.io;
 
 import java.io.*;
 import java.util.Properties;

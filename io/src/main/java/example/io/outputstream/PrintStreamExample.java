@@ -1,4 +1,4 @@
-package example.outputstream;
+package example.io.outputstream;
 
 import java.io.IOException;
 import java.io.PrintStream;

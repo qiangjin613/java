@@ -1,4 +1,6 @@
-package example.outputstream;
+package example.io.outputstream;
+
+import example.io.inputstream.ObjectInputStreamExample;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -6,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * java.io.ObjectOutputStream 示例：将对象序列化后保存到文件中
  *
- * @see example.inputstream.ObjectInputStreamExample
+ * @see ObjectInputStreamExample
  */
 public class ObjectOutputStreamExample implements Serializable {
 
