@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="-76.0" y="175.0">java.lang.AutoCloseable</node>
+    <node x="-89.0" y="-14.0">java.nio.channels.DatagramChannel</node>
+    <node x="-54.0" y="112.0">java.nio.channels.Channel</node>
+    <node x="-66.0" y="232.0">java.nio.channels.FileChannel</node>
+    <node x="-77.5" y="301.0">java.nio.channels.SocketChannel</node>
+    <node x="-59.0" y="47.5">java.io.Closeable</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.io.Closeable" target="java.lang.AutoCloseable" relationship="INTERFACE_GENERALIZATION">
+      <point x="59.0" y="0.0" />
+      <point x="93.5" y="61.5" />
+      <point x="93.5" y="189.0" />
+      <point x="76.0" y="0.0" />
+    </edge>
+    <edge source="java.nio.channels.FileChannel" target="java.nio.channels.Channel" relationship="REALIZATION">
+      <point x="-66.0" y="0.0" />
+      <point x="-93.5" y="246.0" />
+      <point x="-93.5" y="126.0" />
+      <point x="-54.0" y="0.0" />
+    </edge>
+    <edge source="java.nio.channels.Channel" target="java.io.Closeable" relationship="INTERFACE_GENERALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="java.nio.channels.SocketChannel" target="java.nio.channels.Channel" relationship="REALIZATION">
+      <point x="77.5" y="0.0" />
+      <point x="108.5" y="315.0" />
+      <point x="108.5" y="126.0" />
+      <point x="54.0" y="0.0" />
+    </edge>
+    <edge source="java.nio.channels.DatagramChannel" target="java.nio.channels.Channel" relationship="REALIZATION">
+      <point x="-89.0" y="0.0" />
+      <point x="-108.5" y="0.0" />
+      <point x="-108.5" y="93.0" />
+      <point x="-15.0" y="93.0" />
+      <point x="-15.0" y="-14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="1.0" showDependencies="false" x="255.0" y="137.0" />
+  <SelectedNodes>
+    <node>java.nio.channels.Channel</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
