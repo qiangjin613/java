@@ -31,10 +31,11 @@ interface ProxyBase {
 }
 
 class Proxy implements ProxyBase {
+
     private ProxyBase implementation;
 
-    Proxy() {
-        implementation = new Implementation3();
+    Proxy(ProxyBase implementation) {
+        this.implementation = implementation;
     }
 
     @Override
@@ -68,7 +69,7 @@ class Implementation3 implements ProxyBase {
 
 class ProxyDemo {
     public static void main(String[] args) {
-        Proxy p = new Proxy();
+        Proxy p = new Proxy(new Implementation3());
         p.f();
         p.g();
         p.h();
